@@ -4,11 +4,11 @@
 
 ## 🃏 About Me
 
-- 👀 **I'm Interested In** 👀: My interests are broad and interconnected, spanning mathematics, economics, investments, data analytics, machine learning, large language models, and social media AI. I find the synergy between these fields particularly fascinating.
-- 🌱 **I’m Currently Learning** 🌱: My current focus is on mastering machine learning (ML) and large language models (LLMs). I'm also exploring how these technologies intersect with economics and mathematics to drive forward our understanding and capabilities.
-- 📫 **How to Reach Me** 📫: Feel free to reach out to me for collaborations or discussions. You can contact me directly here on GitHub.
-- 😄 **Pronouns** 😄: He/Him/His
-- ⚡ **Fun Fact** ⚡: I study Wirtschaftsinformatik at the University of Hamburg in Germany and Computer Engineering at Harvard University. While I value academic learning, I have a strong preference for practical, hands-on experiences. I believe in learning by doing and always seek to apply theoretical knowledge in practical scenarios.
+- 👀 I'm Interested In 👀: My interests are broad and interconnected, spanning mathematics, economics, investments, data analytics, machine learning, large language models, and social media AI. I find the synergy between these fields particularly fascinating.
+- 🌱 I’m Currently Learning 🌱: I hold a Bachelor's degree in Business Informatics (Wirtschaftsinformatik) from the University of Hamburg and am currently pursuing a Master's degree in IT Management and Consulting at the same university. Additionally, I’m seeking the Business Analytics Extension at Harvard University. My focus is on mastering machine learning (ML), large language models (LLMs), and their intersection with economics and mathematics.
+- 📫 How to Reach Me 📫: Feel free to reach out to me for collaborations or discussions. You can contact me directly here on GitHub.
+- 😄 Pronouns 😄: He/Him/His
+- ⚡ Fun Fact ⚡: While I value academic learning, I have a strong preference for practical, hands-on experiences. I believe in learning by doing and always seek to apply theoretical knowledge in practical scenarios.
 
 # 📊 GitHub Stats:
 ![](https://github-readme-streak-stats.herokuapp.com/?user=AyhamJo7&theme=dark&hide_border=false)<br/>
