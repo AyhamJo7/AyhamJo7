@@ -7,7 +7,8 @@
 ![](https://github-readme-stats.vercel.app/api/top-langs/?username=AyhamJo7&theme=dark&hide_border=true&include_all_commits=false&count_private=false&layout=compact)
 
 ## 🏆 GitHub Trophies
-![](https://github-profile-trophy.vercel.app/?username=AyhamJo7&theme=radical&no-frame=true&no-bg=true&margin-w=4)
+![](https://github-profile-trophy.vercel.app/?username=AyhamJo7&theme=radical&no-frame=true&no-bg=true&margin-w=4&rank=-C,-B,?)
+)
 
 ### ✍️ Random Dev Quote
 ![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=radical)
