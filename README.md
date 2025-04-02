@@ -53,7 +53,7 @@
 
 
 # 📊 GitHub Stats:
-![](https://nirzak-streak-stats.vercel.app/?user=AyhamJo7&theme=dark&hide_border=true)<br/>
+![](https://nirzak-streak-stats.vercel.app/?user=AyhamJo7&theme=dark&hide_border=true.)<br/>
 ![](https://github-readme-stats.vercel.app/api/top-langs/?username=AyhamJo7&theme=dark&hide_border=true&include_all_commits=true&count_private=true&layout=compact&hide=html,TSQL,css&langs_count=8)
 
 ## 🏆 GitHub Trophies
