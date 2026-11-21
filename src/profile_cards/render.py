@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from profile_cards.cards import activity, heatmap, hero, projects, toggle, upstream
+from profile_cards.cards import activity, heatmap, hero, projects, upstream
 from profile_cards.config import Config
 from profile_cards.model import Snapshot
 from profile_cards.theme import esc, fmt_int
@@ -12,7 +12,6 @@ from profile_cards.theme import esc, fmt_int
 CARDS_DIR = "cards"
 README_NAME = "README.md"
 GITHUB = "https://github.com"
-TOGGLE_WIDTH = "252"
 
 
 def _img(name: str, alt: str, width: str = "100%") -> str:
@@ -24,26 +23,8 @@ def _merged_search_url(login: str) -> str:
     return f"{GITHUB}/search?q={query}&type=pullrequests"
 
 
-def _previous_year_block(snapshot: Snapshot) -> str:
-    """A collapsible section: the pill is the button, the card opens beneath it.
-
-    SVG shown as an image cannot be clicked, so the button is an HTML `<summary>`.
-    """
-    total = sum(day.count for day in snapshot.window(1))
-    return (
-        "<details>\n<summary>"
-        + _img("toggle-previous.svg", "Show the 12 months before", TOGGLE_WIDTH)
-        + "</summary>\n"
-        + _img(
-            "activity-previous.svg",
-            f"The 12 months before: {fmt_int(total)} contributions, with monthly "
-            "totals, streaks and weekday rhythm.",
-        )
-        + "\n</details>"
-    )
-
-
 def render_readme(config: Config, snapshot: Snapshot) -> str:
+    months = 24 if snapshot.has_previous_year else 12
     rows = [
         f'<a href="{esc(config.site_url)}">'
         + _img(
@@ -57,9 +38,9 @@ def render_readme(config: Config, snapshot: Snapshot) -> str:
         ),
         _img(
             "activity.svg",
-            "The last 12 months on GitHub: monthly totals, streaks and weekday rhythm.",
+            f"The last {months} months on GitHub: monthly totals, streaks and "
+            "weekday rhythm.",
         ),
-        *([_previous_year_block(snapshot)] if snapshot.has_previous_year else []),
         f'<a href="{esc(_merged_search_url(config.login))}">'
         + _img(
             "upstream.svg",
@@ -101,9 +82,4 @@ def render_all(config: Config, snapshot: Snapshot) -> dict[str, str]:
         files[f"{CARDS_DIR}/project-{index}.svg"] = projects.render_project(
             config, project, index
         )
-    if snapshot.has_previous_year:
-        files[f"{CARDS_DIR}/activity-previous.svg"] = activity.render(
-            config, snapshot, previous=True
-        )
-        files[f"{CARDS_DIR}/toggle-previous.svg"] = toggle.render(config, snapshot)
     return files

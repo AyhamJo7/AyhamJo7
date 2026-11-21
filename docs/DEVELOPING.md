@@ -1,10 +1,9 @@
 # Developing the profile cards
 
 The profile README is generated. `config.toml` says what the cards claim, `profile-cards`
-fetches live data from GitHub and draws ten SVG cards into `cards/` (hero, heatmap,
-activity, upstream, a title banner, one card per project, and the previous-year activity
-card with its toggle), and `README.md` is rewritten to point at them. A daily workflow
-refreshes everything.
+fetches live data from GitHub and draws eight SVG cards into `cards/` (hero, heatmap,
+activity, upstream, a title banner and one card per project), and `README.md` is
+rewritten to point at them. A daily workflow refreshes everything.
 
 ## Commands
 
@@ -40,22 +39,22 @@ The daily workflow needs a repository secret `PROFILE_TOKEN`: a classic personal
 token with the `read:user` scope. The built-in token cannot see private contributions, so
 the workflow fails on purpose without the secret instead of publishing lower numbers.
 
-## The 12 months before (the toggle)
+## The activity card: 24 months in one chart
 
-The profile shows the latest 12 months and, behind a button, the 12 months before.
+The activity card shows two years at once, with nothing to click.
 
 - **Windows.** `Snapshot.window(0)` is the latest 365 days and `window(1)` the 365 days
-  before; `has_previous_year` says whether a complete second window was fetched. A snapshot
-  that only holds one year simply renders without the toggle.
+  before; `has_previous_year` says whether a complete second window was fetched. With one,
+  the card draws 24 monthly bars, the earlier twelve in the lighter blue, a headline for
+  both years, and a legend line built from dots in the two bar colours. With only one year
+  it falls back to twelve bars and no legend.
 - **Streaks use all history, not one window.** The fetcher always reads the two latest
   years, and keeps reading older ones only while the current streak still runs back to the
-  oldest day fetched (up to `HISTORY_WINDOWS_MAX`), so a streak is never capped at 365 days.
-  Each card's streaks look at every day up to its own end; the "days with a contribution"
-  count stays per window.
-- **The button.** A card shown as an image cannot be clicked on GitHub, so the button is an
-  HTML `<details>` block in the generated README: its `<summary>` holds the small pill
-  (`toggle-previous.svg`) and the `activity-previous.svg` card opens beneath it. It cannot
-  swap the card in place; that would need JavaScript, which GitHub does not run.
+  oldest day fetched (up to `HISTORY_WINDOWS_MAX`), so a streak is never capped at 365
+  days. "Days with a contribution" and the weekday rhythm cover the days the card shows.
+- **Why not a button.** A card shown as an image cannot be clicked on GitHub, and an HTML
+  `<details>` toggle that opens a second card was tried and judged clumsy, so both years
+  share one card instead.
 
 ## The portrait
 
