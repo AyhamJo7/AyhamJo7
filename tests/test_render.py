@@ -6,10 +6,11 @@ from dataclasses import replace
 
 import pytest
 
+from profile_cards.cards.activity import _shows_year
 from profile_cards.config import Config
 from profile_cards.model import YEAR_DAYS, Snapshot
 from profile_cards.render import render_all
-from profile_cards.stats import MONTH_NAMES
+from profile_cards.stats import MONTH_NAMES, MonthTotal
 from profile_cards.theme import compact, esc, fmt_int, shade, wrap
 
 EXPECTED_FILES = {
@@ -22,8 +23,6 @@ EXPECTED_FILES = {
     "cards/project-1.svg",
     "cards/project-2.svg",
     "cards/project-3.svg",
-    "cards/activity-previous.svg",
-    "cards/toggle-previous.svg",
 }
 SVG_NS = "{http://www.w3.org/2000/svg}"
 
@@ -223,7 +222,8 @@ def test_readme_links_to_the_site_and_the_projects(
     assert f'<a href="{config.site_url}">' in readme
     for project in snapshot.projects:
         assert f'href="https://github.com/{project.repo}"' in readme
-    assert readme.count("<img ") == 10
+    assert readme.count("<img ") == 8
+    assert "The last 24 months on GitHub" in readme
     assert "\n\n<" not in readme.split("</div>")[0]
 
 
@@ -233,62 +233,105 @@ def card_text(svg: str) -> str:
     return " ".join("".join(el.itertext()) for el in root.iter(f"{SVG_NS}text"))
 
 
-def test_the_toggle_is_a_summary_button_that_opens_the_previous_card(
+def month_labels(svg: str) -> list[str]:
+    """The month names drawn under the bars of the activity card, left to right."""
+    root = ET.fromstring(svg)
+    return [
+        t.text
+        for t in root.iter(f"{SVG_NS}text")
+        if t.text in MONTH_NAMES and "mono" in (t.get("class") or "")
+    ]
+
+
+def bar_classes(svg: str) -> list[str]:
+    """The class of every monthly bar of the activity card (they are the 'grow' rects
+    that are taller than the weekday-rhythm bars' base line)."""
+    root = ET.fromstring(svg)
+    return [
+        r.get("class") or ""
+        for r in root.iter(f"{SVG_NS}rect")
+        if "grow" in (r.get("class") or "").split()
+        and float(r.get("width") or 0) < 31
+        and float(r.get("x") or 0) < 580
+    ]
+
+
+def test_with_two_years_the_activity_card_shows_24_months_in_one_chart(
+    files: dict[str, str], snapshot: Snapshot
+) -> None:
+    card = files["cards/activity.svg"]
+    text = card_text(card)
+    assert len(month_labels(card)) == 24
+    assert "The last 24 months" in text
+    both = sum(d.count for d in snapshot.window(0) + snapshot.window(1))
+    assert fmt_int(both) in text, "the headline covers both years"
+    assert f"{fmt_int(snapshot.total)} in the last 12 months" in text
+    assert f"{fmt_int(both - snapshot.total)} in the 12 months before" in text
+
+
+def test_the_earlier_year_is_a_lighter_shade_than_the_latest(
     files: dict[str, str],
 ) -> None:
-    readme = files["README.md"]
-    block = readme[readme.index("<details>") : readme.index("</details>")]
-    assert "<summary>" in block
-    assert "toggle-previous.svg" in block.split("</summary>")[0]
-    assert "activity-previous.svg" in block.split("</summary>")[1]
-    assert readme.index("activity.svg") < readme.index("<details>")
-    assert readme.index("</details>") < readme.index("upstream.svg")
-    assert "\n\n" not in block
+    classes = bar_classes(files["cards/activity.svg"])
+    assert len(classes) == 24
+    earlier, latest = classes[:12], classes[12:]
+    assert sum("t2" in c for c in earlier) >= 10, "earlier months are the light blue"
+    assert sum("t4" in c for c in latest) >= 9, "latest months are the brand blue"
+    assert not any("t2" in c for c in latest)
 
 
-def test_without_a_full_previous_year_there_is_no_toggle_and_no_extra_card(
-    config: Config, snapshot: Snapshot
-) -> None:
-    one_year = replace(snapshot, days=snapshot.window(0))
-    result = render_all(config, one_year)
-    assert "cards/activity-previous.svg" not in result
-    assert "cards/toggle-previous.svg" not in result
-    assert "<details>" not in result["README.md"]
-    ET.fromstring(result["cards/activity.svg"])
-
-
-def test_each_activity_card_shows_the_total_of_its_own_window(
+def test_the_card_shows_the_range_both_private_counts_and_year_captions(
     files: dict[str, str], snapshot: Snapshot
 ) -> None:
-    latest = card_text(files["cards/activity.svg"])
-    previous = card_text(files["cards/activity-previous.svg"])
-    assert fmt_int(sum(d.count for d in snapshot.window(0))) in latest
-    assert fmt_int(sum(d.count for d in snapshot.window(1))) in previous
-    assert "The 12 months before" in previous
-    assert "The last 12 months" in latest
-    assert "300 of them in private" in previous
-    assert "120 of them in private" in latest
+    text = card_text(files["cards/activity.svg"])
+    start = snapshot.window(1)[0].date
+    end = snapshot.generated
+    assert f"{start.day} {MONTH_NAMES[start.month - 1]} {start.year}" in text
+    assert f"{end.day} {MONTH_NAMES[end.month - 1]} {end.year}" in text
+    assert "420 of them in private repositories" in text, "120 + 300 private"
+    assert str(end.year) in text
+    assert str(end.year - 1) in text
 
 
-def test_the_previous_card_dates_its_window_and_its_streak(
-    files: dict[str, str], snapshot: Snapshot
-) -> None:
-    previous = card_text(files["cards/activity-previous.svg"])
-    end = snapshot.window_end(1)
-    assert f"{end.day} {MONTH_NAMES[end.month - 1]} {end.year}" in previous
-    assert f"streak up to {end.day} {MONTH_NAMES[end.month - 1]}" in previous
-    assert "current streak" not in previous
+def test_year_captions_never_collide_at_the_first_bar() -> None:
+    def series(first_month: int) -> list[MonthTotal]:
+        out, year, month = [], 2025, first_month
+        for _ in range(24):
+            out.append(MonthTotal(year, month, 1, partial=False))
+            month += 1
+            if month == 13:
+                year, month = year + 1, 1
+        return out
+
+    december_start = series(12)
+    assert [i for i in range(24) if _shows_year(december_start, i)] == [1, 13]
+    august_start = series(8)
+    assert _shows_year(august_start, 0), "five months before the first January"
 
 
-def test_the_current_streak_counts_beyond_the_twelve_month_window(
+def test_the_streak_counts_beyond_the_days_shown_and_active_days_use_both_years(
     config: Config, snapshot: Snapshot
 ) -> None:
     always_active = replace(
         snapshot, days=tuple(replace(d, count=3) for d in snapshot.days)
     )
-    latest = card_text(render_all(config, always_active)["cards/activity.svg"])
-    assert f"{2 * YEAR_DAYS} days" in latest, "current streak spans both years"
-    assert f"{YEAR_DAYS} / {YEAR_DAYS}" in latest, "active days stay per window"
+    text = card_text(render_all(config, always_active)["cards/activity.svg"])
+    assert f"{2 * YEAR_DAYS} days" in text, "current streak spans both years"
+    assert f"{2 * YEAR_DAYS} / {2 * YEAR_DAYS}" in text, "active days of 730"
+
+
+def test_with_one_year_the_card_shows_12_months_and_no_legend(
+    config: Config, snapshot: Snapshot
+) -> None:
+    one_year = replace(snapshot, days=snapshot.window(0))
+    result = render_all(config, one_year)
+    card = result["cards/activity.svg"]
+    text = card_text(card)
+    assert len(month_labels(card)) == 12
+    assert "The last 12 months" in text
+    assert "in the 12 months before" not in text
+    assert "The last 12 months on GitHub" in result["README.md"]
+    assert "details" not in result["README.md"]
 
 
 def test_readme_images_have_alt_text(files: dict[str, str]) -> None:

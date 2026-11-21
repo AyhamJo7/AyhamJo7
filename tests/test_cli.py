@@ -27,7 +27,7 @@ def test_render_writes_every_card_from_a_snapshot(
     )
     assert code == 0
     assert (tmp_path / "README.md").read_text(encoding="utf-8").startswith("<!--")
-    assert len(list((tmp_path / "cards").glob("*.svg"))) == 10
+    assert len(list((tmp_path / "cards").glob("*.svg"))) == 8
 
 
 def test_render_fails_cleanly_on_a_missing_snapshot(tmp_path: Path) -> None:
