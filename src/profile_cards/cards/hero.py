@@ -6,6 +6,8 @@ from profile_cards.config import Config
 from profile_cards.model import Snapshot
 from profile_cards.portrait import load_portrait
 from profile_cards.theme import (
+    DARK,
+    LIGHT,
     card_rect,
     document,
     esc,
@@ -35,24 +37,75 @@ PORTRAIT_HEIGHT = 388
 PORTRAIT_DELAY_SECONDS = 0.15
 PORTRAIT_REVEAL_SECONDS = 1.6
 NAME_REVEAL_DELAYS = (0.0, 0.12)
-# The travelling light: a slanted band that crosses the name, then the portrait.
-GLOW_ON_INK = "glowOnInk"
-GLOW_ON_BLUE = "glowOnBlue"
-GLOW_WIDTH = 190
-GLOW_SKEW_DEGREES = -18
-# Where the band rests before it starts, and where its left edge ends up. The end is
-# past the portrait's right edge, allowing for the slant at the top of the card.
-GLOW_REST_X = 420
-GLOW_END_X = 1000
-GLOW_BEGIN_SECONDS = 1.6
-GLOW_SECONDS = 9.0
-GLOW_TRAVEL_FRACTION = 0.6
-# Constant speed, so the light moves through the letters instead of flashing past.
-GLOW_EASING = "0 0 1 1"
+
+# The travelling light. Each surface is filled with a gradient that is its own colour
+# with one soft band of a brighter colour; the gradient's transform is animated with a
+# plain SVG `animateTransform`, so the band slides across the name and then the
+# portrait. This is the same mechanism as a CSS-free "shine" and it cannot be switched
+# off by a media query, so it plays for everyone.
+SHINE_LENGTH = 700
+# The gradient vector tilts up to the right, which slants the band like italics.
+SHINE_SLANT = 150
+SHINE_BAND_STOPS = (0.0, 0.4, 0.5, 0.6, 1.0)
+# Translation of the gradient: far enough left that the band rests off the card, and
+# far enough right that it has left the portrait's edge.
+SHINE_START_X = -700
+SHINE_END_X = 700
+SHINE_BEGIN_SECONDS = 1.6
+SHINE_SECONDS = 10.0
+SHINE_TRAVEL_FRACTION = 0.54
+# (class name, gradient name, base colour key, band colour key)
+SHINE_SURFACES = (
+    ("shine-name", "shineName", "ink", "accent"),
+    ("shine-surname", "shineSurname", "accent", "sheen"),
+    ("shine-sketch", "shineSketch", "sketch", "accent"),
+)
+
+
+def _shine_gradient(identifier: str, base: str, band: str) -> str:
+    colours = (base, base, band, base, base)
+    stops = "".join(
+        f'<stop offset="{offset}" stop-color="{colour}"/>'
+        for offset, colour in zip(SHINE_BAND_STOPS, colours, strict=True)
+    )
+    travel = (
+        f'<animateTransform attributeName="gradientTransform" type="translate" '
+        f'values="{SHINE_START_X} 0;{SHINE_END_X} 0;{SHINE_END_X} 0" '
+        f'keyTimes="0;{SHINE_TRAVEL_FRACTION};1" dur="{SHINE_SECONDS}s" '
+        f'begin="{SHINE_BEGIN_SECONDS}s" repeatCount="indefinite"/>'
+    )
+    return (
+        f'<linearGradient id="{identifier}" gradientUnits="userSpaceOnUse" '
+        f'x1="0" y1="0" x2="{SHINE_LENGTH}" y2="{-SHINE_SLANT}" '
+        f'gradientTransform="translate({SHINE_START_X} 0)">{stops}{travel}'
+        "</linearGradient>"
+    )
+
+
+def _shine_defs() -> str:
+    """One gradient per surface and colour scheme, with literal colours."""
+    gradients = []
+    for _, name, base, band in SHINE_SURFACES:
+        for scheme, palette in (("Light", LIGHT), ("Dark", DARK)):
+            gradients.append(
+                _shine_gradient(f"{name}{scheme}", palette[base], palette[band])
+            )
+    return f"<defs>{''.join(gradients)}</defs>"
+
+
+def _shine_css() -> str:
+    """Fill each surface with its light gradient, or its dark one in dark mode."""
+
+    def rules(scheme: str) -> str:
+        return "".join(
+            f".{cls}{{fill:url(#{name}{scheme})}}" for cls, name, _, _ in SHINE_SURFACES
+        )
+
+    return f"{rules('Light')}@media(prefers-color-scheme:dark){{{rules('Dark')}}}"
 
 
 def _portrait() -> str:
-    """The sketch: the card's ink seen through the portrait mask, right-aligned."""
+    """The sketch: a paper-coloured figure, and the portrait ink drawn on top of it."""
     portrait = load_portrait()
     if portrait is None:
         return ""
@@ -75,70 +128,25 @@ def _portrait() -> str:
         f"<defs>{mask('figure', portrait.figure_uri)}"
         f"{mask('portrait', portrait.data_uri)}</defs>"
         f'<rect class="panel rise" mask="url(#figure)" {box} {timing}/>'
-        f'<rect class="sketch rise" mask="url(#portrait)" {box} {timing}/>'
-        f'<rect class="glow rise" mask="url(#portrait)" {box} '
-        f'style="fill:url(#{GLOW_ON_INK});animation-delay:{PORTRAIT_DELAY_SECONDS}s;'
-        f'animation-duration:{PORTRAIT_REVEAL_SECONDS}s"/>'
-    )
-
-
-def _glow_defs() -> str:
-    """Two slanted bands of light that travel across the whole card, left to right.
-
-    Each is a gradient in card coordinates (transparent, colour, transparent) whose
-    transform is animated natively, so one band passes over the name and then the
-    portrait. The band rests far off the left edge before it starts and between runs.
-    """
-    start, end = -GLOW_REST_X, GLOW_END_X
-    travel = (
-        f'<animateTransform attributeName="gradientTransform" type="translate" '
-        f'additive="sum" values="0 0;{end - start} 0;{end - start} 0" '
-        f'keyTimes="0;{GLOW_TRAVEL_FRACTION};1" calcMode="spline" '
-        f'keySplines="{GLOW_EASING};0 0 1 1" dur="{GLOW_SECONDS}s" '
-        f'begin="{GLOW_BEGIN_SECONDS}s" repeatCount="indefinite"/>'
-    )
-
-    def gradient(identifier: str, color: str) -> str:
-        stops = "".join(
-            f'<stop offset="{offset}" style="stop-color:var({color});'
-            f'stop-opacity:{opacity}"/>'
-            for offset, opacity in ((0, 0), (0.5, 1), (1, 0))
-        )
-        return (
-            f'<linearGradient id="{identifier}" gradientUnits="userSpaceOnUse" '
-            f'x1="0" y1="0" x2="{GLOW_WIDTH}" y2="0" '
-            f'gradientTransform="skewX({GLOW_SKEW_DEGREES}) translate({start} 0)">'
-            f"{stops}{travel}</linearGradient>"
-        )
-
-    return (
-        f"<defs>{gradient(GLOW_ON_INK, '--accent')}"
-        f"{gradient(GLOW_ON_BLUE, '--sheen')}</defs>"
+        f'<rect class="shine-sketch rise" mask="url(#portrait)" {box} {timing}/>'
     )
 
 
 def _name(config: Config) -> str:
-    """First name in ink, last name in blue italic; the light passes through both."""
+    """First name in ink, last name in blue italic; the light slides through both."""
     style = f"letter-spacing:{NAME_LETTER_SPACING}"
     lines = (
-        (config.first_name, "serif", "ink", GLOW_ON_INK),
-        (config.last_name, "serif it", "accent", GLOW_ON_BLUE),
+        (config.first_name, "serif shine-name"),
+        (config.last_name, "serif it shine-surname"),
     )
-    out = []
-    for (text, font, base, glow), baseline, reveal in zip(
-        lines, NAME_BASELINES, NAME_REVEAL_DELAYS, strict=True
-    ):
-        timing = f"{style};animation-delay:{reveal}s"
-        out.append(
-            f'<text class="{font} {base} rise" x="{TEXT_X - 2}" y="{baseline}" '
-            f'font-size="{NAME_FONT_PX}" style="{timing}">{esc(text)}</text>'
+    return "".join(
+        f'<text class="{classes} rise" x="{TEXT_X - 2}" y="{baseline}" '
+        f'font-size="{NAME_FONT_PX}" style="{style};animation-delay:{reveal}s">'
+        f"{esc(text)}</text>"
+        for (text, classes), baseline, reveal in zip(
+            lines, NAME_BASELINES, NAME_REVEAL_DELAYS, strict=True
         )
-        out.append(
-            f'<text class="{font} glow rise" x="{TEXT_X - 2}" y="{baseline}" '
-            f'font-size="{NAME_FONT_PX}" style="{timing};fill:url(#{glow})">'
-            f"{esc(text)}</text>"
-        )
-    return "".join(out)
+    )
 
 
 def _pill(label: str, y: int) -> str:
@@ -171,7 +179,7 @@ def render(config: Config, snapshot: Snapshot) -> str:
     eyebrow = f"{config.role} · {config.location}"
     body = (
         card_rect(WIDTH, HEIGHT)
-        + _glow_defs()
+        + _shine_defs()
         + _portrait()
         + live_dot(TEXT_X + 4, 62)
         + f'<text class="cap muted" x="{TEXT_X + 18}" y="66">{esc(eyebrow)}</text>'
@@ -189,4 +197,5 @@ def render(config: Config, snapshot: Snapshot) -> str:
             f"{fmt_int(snapshot.total)} contributions in the last year."
         ),
         fonts=("serif", "serif-italic", "mono", "sans"),
+        extra_css=_shine_css(),
     )

@@ -58,11 +58,10 @@ def test_cards_contain_no_scripts_or_external_references(files: dict[str, str]) 
         assert not re.search(r"url\(\s*['\"]?https?://", content), path
 
 
-def test_cards_support_dark_mode_and_reduced_motion(files: dict[str, str]) -> None:
+def test_cards_support_dark_mode(files: dict[str, str]) -> None:
     for path, content in files.items():
         if path.endswith(".svg"):
             assert "prefers-color-scheme:dark" in content, path
-            assert "prefers-reduced-motion:reduce" in content, path
 
 
 def test_untrusted_text_cannot_inject_markup(
@@ -88,7 +87,7 @@ def test_hero_draws_the_portrait_as_ink_seen_through_an_embedded_mask(
     assert (image.get("href") or "").startswith("data:image/webp;base64,")
     sketch = root.find(f".//{SVG_NS}rect[@mask='url(#portrait)']")
     assert sketch is not None
-    assert "sketch" in (sketch.get("class") or "").split()
+    assert "shine-sketch" in (sketch.get("class") or "").split()
     assert root.find(f".//{SVG_NS}mask[@id='figure']") is not None
     panel = [
         r
@@ -101,48 +100,67 @@ def test_hero_draws_the_portrait_as_ink_seen_through_an_embedded_mask(
         assert panel[0].get(attribute) == sketch.get(attribute)
 
 
-def test_hero_light_is_one_natively_animated_gradient_per_surface(
+SHINE_GRADIENTS = [
+    f"{surface}{scheme}"
+    for surface in ("shineName", "shineSurname", "shineSketch")
+    for scheme in ("Light", "Dark")
+]
+
+
+def test_hero_light_is_the_fill_of_each_surface_slid_by_a_plain_animation(
     files: dict[str, str],
 ) -> None:
-    """The light must be a gradient animated with SMIL, not a mask child.
+    """The light is a gradient fill moved by a plain SMIL animateTransform.
 
-    Animating an element inside a <mask> does not repaint in Chrome, which left the
-    light frozen off-screen in the live profile.
+    This mirrors the proven mechanism of the card it was modelled on. Animating an
+    element inside a <mask> never repaints in Chrome, and a light kept on separate
+    overlay copies can be hidden by a media query; neither is allowed here.
     """
     root = ET.fromstring(files["cards/hero.svg"])
     assert root.find(f".//{SVG_NS}mask[@id='sweep']") is None
-    for identifier in ("glowOnInk", "glowOnBlue"):
+    for identifier in SHINE_GRADIENTS:
         gradient = root.find(f".//{SVG_NS}linearGradient[@id='{identifier}']")
-        assert gradient is not None
+        assert gradient is not None, identifier
         assert gradient.get("gradientUnits") == "userSpaceOnUse"
+        assert gradient.get("gradientTransform", "").startswith("translate(-"), (
+            "the band must rest off the card before it starts"
+        )
+        stops = gradient.findall(f"{SVG_NS}stop")
+        assert all(stop.get("stop-color", "").startswith("#") for stop in stops), (
+            "literal colours only, no CSS variables inside stops"
+        )
         animation = gradient.find(f"{SVG_NS}animateTransform")
         assert animation is not None
         assert animation.get("attributeName") == "gradientTransform"
         assert animation.get("repeatCount") == "indefinite"
-        assert animation.get("additive") == "sum"
+        assert animation.get("additive") is None, "plain replace, no additive sum"
+        assert len((animation.get("values") or "").split(";")) == 3
 
 
-def test_hero_light_reaches_the_name_and_then_the_portrait(
+def test_hero_light_fills_the_name_and_the_portrait_ink(
     files: dict[str, str],
 ) -> None:
     root = ET.fromstring(files["cards/hero.svg"])
-    glows = [
-        element
-        for element in root.iter()
-        if "glow" in (element.get("class") or "").split()
-    ]
-    fills = [element.get("style") or "" for element in glows]
-    assert [text for text in glows if text.tag == f"{SVG_NS}text"]
-    assert sum("url(#glowOnInk)" in fill for fill in fills) == 2, "first name + photo"
-    assert sum("url(#glowOnBlue)" in fill for fill in fills) == 1, "last name"
-    portrait_glow = [g for g in glows if g.get("mask") == "url(#portrait)"]
-    assert len(portrait_glow) == 1, "the light continues over the portrait"
+
+    def classes(element: ET.Element) -> list[str]:
+        return (element.get("class") or "").split()
+
+    texts = {t.text: classes(t) for t in root.iter(f"{SVG_NS}text") if t.text}
+    assert "shine-name" in texts["Ayham"]
+    assert "shine-surname" in texts["Joumran"]
+    sketch = [r for r in root.iter(f"{SVG_NS}rect") if "shine-sketch" in classes(r)]
+    assert len(sketch) == 1
+    assert sketch[0].get("mask") == "url(#portrait)", "the light reaches the photo"
+    css = files["cards/hero.svg"]
+    for surface in ("shine-name", "shine-surname", "shine-sketch"):
+        assert f".{surface}{{fill:url(#" in css
 
 
-def test_hero_light_is_hidden_when_reduced_motion_is_requested(
-    files: dict[str, str],
-) -> None:
-    assert ".glow{display:none}" in files["cards/hero.svg"]
+def test_hero_light_does_not_depend_on_reduced_motion(files: dict[str, str]) -> None:
+    """The light must play for everyone; nothing may hide or gate it."""
+    hero = files["cards/hero.svg"]
+    assert "prefers-reduced-motion" not in hero
+    assert ".glow" not in hero
 
 
 def test_hero_without_a_portrait_still_renders(
