@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+from collections.abc import Mapping
 from urllib.parse import quote
 
 from profile_cards.cards import activity, heatmap, hero, projects, upstream
@@ -12,10 +14,18 @@ from profile_cards.theme import esc, fmt_int
 CARDS_DIR = "cards"
 README_NAME = "README.md"
 GITHUB = "https://github.com"
+VERSION_HEX_LENGTH = 10
 
 
-def _img(name: str, alt: str, width: str = "100%") -> str:
-    return f'<img src="./{CARDS_DIR}/{name}" width="{width}" alt="{esc(alt)}" />'
+def card_versions(cards: Mapping[str, str]) -> dict[str, str]:
+    """A short content hash per card file name, so a changed card gets a new URL."""
+    return {
+        path.removeprefix(f"{CARDS_DIR}/"): hashlib.sha256(
+            content.encode()
+        ).hexdigest()[:VERSION_HEX_LENGTH]
+        for path, content in cards.items()
+        if path.startswith(f"{CARDS_DIR}/")
+    }
 
 
 def _merged_search_url(login: str) -> str:
@@ -23,8 +33,17 @@ def _merged_search_url(login: str) -> str:
     return f"{GITHUB}/search?q={query}&type=pullrequests"
 
 
-def render_readme(config: Config, snapshot: Snapshot) -> str:
+def render_readme(
+    config: Config, snapshot: Snapshot, versions: Mapping[str, str]
+) -> str:
     months = 24 if snapshot.has_previous_year else 12
+
+    def _img(name: str, alt: str, width: str = "100%") -> str:
+        # GitHub's image proxy keeps a card for hours under its URL; a new ?v= each
+        # time the card changes makes the profile show the fresh one at once.
+        src = f"./{CARDS_DIR}/{name}?v={versions[name]}"
+        return f'<img src="{src}" width="{width}" alt="{esc(alt)}" />'
+
     rows = [
         f'<a href="{esc(config.site_url)}">'
         + _img(
@@ -76,10 +95,10 @@ def render_all(config: Config, snapshot: Snapshot) -> dict[str, str]:
         f"{CARDS_DIR}/activity.svg": activity.render(config, snapshot),
         f"{CARDS_DIR}/upstream.svg": upstream.render(config, snapshot),
         f"{CARDS_DIR}/coding.svg": projects.render_title(config, snapshot),
-        README_NAME: render_readme(config, snapshot),
     }
     for index, project in enumerate(snapshot.projects, start=1):
         files[f"{CARDS_DIR}/project-{index}.svg"] = projects.render_project(
             config, project, index
         )
+    files[README_NAME] = render_readme(config, snapshot, card_versions(files))
     return files
