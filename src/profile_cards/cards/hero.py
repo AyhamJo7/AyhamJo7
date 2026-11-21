@@ -34,12 +34,21 @@ PORTRAIT_TOP = 30
 PORTRAIT_HEIGHT = 388
 PORTRAIT_DELAY_SECONDS = 0.15
 PORTRAIT_REVEAL_SECONDS = 1.6
-SWEEP_WIDTH = 150
-SWEEP_LEAD = 100
-SWEEP_SKEW_DEGREES = -18
-SWEEP_TOP = 70
-SWEEP_HEIGHT = 250
-SWEEP_REVEAL_DELAYS = (0.0, 0.12)
+NAME_REVEAL_DELAYS = (0.0, 0.12)
+# The travelling light: a slanted band that crosses the name, then the portrait.
+GLOW_ON_INK = "glowOnInk"
+GLOW_ON_BLUE = "glowOnBlue"
+GLOW_WIDTH = 190
+GLOW_SKEW_DEGREES = -18
+# Where the band rests before it starts, and where its left edge ends up. The end is
+# past the portrait's right edge, allowing for the slant at the top of the card.
+GLOW_REST_X = 420
+GLOW_END_X = 1000
+GLOW_BEGIN_SECONDS = 1.6
+GLOW_SECONDS = 9.0
+GLOW_TRAVEL_FRACTION = 0.6
+# Constant speed, so the light moves through the letters instead of flashing past.
+GLOW_EASING = "0 0 1 1"
 
 
 def _portrait() -> str:
@@ -67,44 +76,66 @@ def _portrait() -> str:
         f"{mask('portrait', portrait.data_uri)}</defs>"
         f'<rect class="panel rise" mask="url(#figure)" {box} {timing}/>'
         f'<rect class="sketch rise" mask="url(#portrait)" {box} {timing}/>'
+        f'<rect class="glow rise" mask="url(#portrait)" {box} '
+        f'style="fill:url(#{GLOW_ON_INK});animation-delay:{PORTRAIT_DELAY_SECONDS}s;'
+        f'animation-duration:{PORTRAIT_REVEAL_SECONDS}s"/>'
     )
 
 
-def _sweep_defs() -> str:
-    """A soft slanted band of light, used as a mask over copies of the name."""
+def _glow_defs() -> str:
+    """Two slanted bands of light that travel across the whole card, left to right.
+
+    Each is a gradient in card coordinates (transparent, colour, transparent) whose
+    transform is animated natively, so one band passes over the name and then the
+    portrait. The band rests far off the left edge before it starts and between runs.
+    """
+    start, end = -GLOW_REST_X, GLOW_END_X
+    travel = (
+        f'<animateTransform attributeName="gradientTransform" type="translate" '
+        f'additive="sum" values="0 0;{end - start} 0;{end - start} 0" '
+        f'keyTimes="0;{GLOW_TRAVEL_FRACTION};1" calcMode="spline" '
+        f'keySplines="{GLOW_EASING};0 0 1 1" dur="{GLOW_SECONDS}s" '
+        f'begin="{GLOW_BEGIN_SECONDS}s" repeatCount="indefinite"/>'
+    )
+
+    def gradient(identifier: str, color: str) -> str:
+        stops = "".join(
+            f'<stop offset="{offset}" style="stop-color:var({color});'
+            f'stop-opacity:{opacity}"/>'
+            for offset, opacity in ((0, 0), (0.5, 1), (1, 0))
+        )
+        return (
+            f'<linearGradient id="{identifier}" gradientUnits="userSpaceOnUse" '
+            f'x1="0" y1="0" x2="{GLOW_WIDTH}" y2="0" '
+            f'gradientTransform="skewX({GLOW_SKEW_DEGREES}) translate({start} 0)">'
+            f"{stops}{travel}</linearGradient>"
+        )
+
     return (
-        '<defs><linearGradient id="band">'
-        '<stop offset="0" stop-color="#fff" stop-opacity="0"/>'
-        '<stop offset=".5" stop-color="#fff"/>'
-        '<stop offset="1" stop-color="#fff" stop-opacity="0"/>'
-        "</linearGradient>"
-        f'<mask id="sweep" maskUnits="userSpaceOnUse" x="0" y="{SWEEP_TOP}" '
-        f'width="{WIDTH}" height="{SWEEP_HEIGHT}">'
-        f'<g transform="skewX({SWEEP_SKEW_DEGREES})">'
-        f'<rect class="sweep" x="{-(SWEEP_WIDTH + SWEEP_LEAD)}" y="0" '
-        f'width="{SWEEP_WIDTH}" height="{SWEEP_TOP + SWEEP_HEIGHT}" '
-        f'fill="url(#band)"/></g></mask></defs>'
+        f"<defs>{gradient(GLOW_ON_INK, '--accent')}"
+        f"{gradient(GLOW_ON_BLUE, '--sheen')}</defs>"
     )
 
 
 def _name(config: Config) -> str:
-    """First name in ink, last name in blue italic; a light sweeps through both."""
+    """First name in ink, last name in blue italic; the light passes through both."""
     style = f"letter-spacing:{NAME_LETTER_SPACING}"
     lines = (
-        (config.first_name, "serif", "ink", "accent"),
-        (config.last_name, "serif it", "accent", "sheen"),
+        (config.first_name, "serif", "ink", GLOW_ON_INK),
+        (config.last_name, "serif it", "accent", GLOW_ON_BLUE),
     )
     out = []
     for (text, font, base, glow), baseline, reveal in zip(
-        lines, NAME_BASELINES, SWEEP_REVEAL_DELAYS, strict=True
+        lines, NAME_BASELINES, NAME_REVEAL_DELAYS, strict=True
     ):
-        common = (
-            f'x="{TEXT_X - 2}" y="{baseline}" font-size="{NAME_FONT_PX}" '
-            f'style="{style};animation-delay:{reveal}s"'
-        )
-        out.append(f'<text class="{font} {base} rise" {common}>{esc(text)}</text>')
+        timing = f"{style};animation-delay:{reveal}s"
         out.append(
-            f'<text class="{font} {glow} rise" mask="url(#sweep)" {common}>'
+            f'<text class="{font} {base} rise" x="{TEXT_X - 2}" y="{baseline}" '
+            f'font-size="{NAME_FONT_PX}" style="{timing}">{esc(text)}</text>'
+        )
+        out.append(
+            f'<text class="{font} glow rise" x="{TEXT_X - 2}" y="{baseline}" '
+            f'font-size="{NAME_FONT_PX}" style="{timing};fill:url(#{glow})">'
             f"{esc(text)}</text>"
         )
     return "".join(out)
@@ -140,7 +171,7 @@ def render(config: Config, snapshot: Snapshot) -> str:
     eyebrow = f"{config.role} · {config.location}"
     body = (
         card_rect(WIDTH, HEIGHT)
-        + _sweep_defs()
+        + _glow_defs()
         + _portrait()
         + live_dot(TEXT_X + 4, 62)
         + f'<text class="cap muted" x="{TEXT_X + 18}" y="66">{esc(eyebrow)}</text>'

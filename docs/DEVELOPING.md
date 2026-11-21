@@ -68,9 +68,17 @@ the hero simply renders without one.
 
 ## The light in the name
 
-Each name line is drawn twice: once normally and once in a lighter colour behind a mask.
-The mask is a soft slanted band (`.sweep`, animated in `theme.py`) that glides across the
-letters every few seconds. With reduced motion enabled the band rests off to the side.
+Each name line and the portrait ink are drawn twice: once normally and once as a `glow`
+copy filled with a gradient. The gradient is a soft slanted band in card coordinates
+(transparent, colour, transparent) whose transform is animated with SVG's native
+`animateTransform` (see `_glow_defs` in `cards/hero.py`). One band therefore passes over
+"Ayham", "Joumran" and then the portrait, at constant speed, and rests off the left edge
+between runs. With reduced motion enabled the `glow` copies are hidden.
+
+Do not move this animation into a `<mask>` or `<clipPath>`: Chrome does not repaint an
+animated element inside a mask, so the light never appears. Check any change to it with
+real-time frames, not static previews (`scratchpad` style CDP capture: load the SVG in
+headless Chrome and screenshot it at 2 s, 3 s, 4 s ...).
 
 ## Fonts
 
