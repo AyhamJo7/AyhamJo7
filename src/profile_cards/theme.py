@@ -13,9 +13,6 @@ from profile_cards.stats import LEVELS
 
 CARD_INSET = 6
 CARD_RADIUS = 26
-SWEEP_TRAVEL_PX = 820
-SWEEP_SECONDS = 6.5
-SWEEP_START_SECONDS = 1.4
 SIDE_SHADE_LEFT = 0.82
 SIDE_SHADE_RIGHT = 0.66
 SANS_CHAR_WIDTH = 0.56
@@ -148,8 +145,6 @@ STYLE = (
     "@keyframes ping{0%{opacity:.9;transform:scale(1)}"
     "100%{opacity:0;transform:scale(2.6)}}"
     "@keyframes draw{from{stroke-dashoffset:var(--len)}}"
-    "@keyframes sweep{0%{transform:translateX(0)}"
-    f"55%,100%{{transform:translateX({SWEEP_TRAVEL_PX}px)}}}}"
     ".rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}"
     ".pop{transform-box:fill-box;transform-origin:center;"
     "animation:pop .55s cubic-bezier(.2,.9,.3,1.3) both}"
@@ -159,9 +154,8 @@ STYLE = (
     ".ping{transform-box:fill-box;transform-origin:center;"
     "animation:ping 2.4s ease-out infinite}"
     ".draw{stroke-dasharray:var(--len);animation:draw 1.6s ease-out both}"
-    f".sweep{{animation:sweep {SWEEP_SECONDS}s cubic-bezier(.45,0,.2,1) "
-    f"{SWEEP_START_SECONDS}s infinite}}"
-    "@media(prefers-reduced-motion:reduce){*{animation:none!important}}"
+    "@media(prefers-reduced-motion:reduce){*{animation:none!important}"
+    ".glow{display:none}}"
 )
 
 

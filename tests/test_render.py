@@ -101,13 +101,48 @@ def test_hero_draws_the_portrait_as_ink_seen_through_an_embedded_mask(
         assert panel[0].get(attribute) == sketch.get(attribute)
 
 
-def test_hero_light_sweep_masks_a_copy_of_each_name_line(
+def test_hero_light_is_one_natively_animated_gradient_per_surface(
+    files: dict[str, str],
+) -> None:
+    """The light must be a gradient animated with SMIL, not a mask child.
+
+    Animating an element inside a <mask> does not repaint in Chrome, which left the
+    light frozen off-screen in the live profile.
+    """
+    root = ET.fromstring(files["cards/hero.svg"])
+    assert root.find(f".//{SVG_NS}mask[@id='sweep']") is None
+    for identifier in ("glowOnInk", "glowOnBlue"):
+        gradient = root.find(f".//{SVG_NS}linearGradient[@id='{identifier}']")
+        assert gradient is not None
+        assert gradient.get("gradientUnits") == "userSpaceOnUse"
+        animation = gradient.find(f"{SVG_NS}animateTransform")
+        assert animation is not None
+        assert animation.get("attributeName") == "gradientTransform"
+        assert animation.get("repeatCount") == "indefinite"
+        assert animation.get("additive") == "sum"
+
+
+def test_hero_light_reaches_the_name_and_then_the_portrait(
     files: dict[str, str],
 ) -> None:
     root = ET.fromstring(files["cards/hero.svg"])
-    assert root.find(f".//{SVG_NS}mask[@id='sweep']") is not None
-    masked = root.findall(f".//{SVG_NS}text[@mask='url(#sweep)']")
-    assert [m.text for m in masked] == ["Ayham", "Joumran"]
+    glows = [
+        element
+        for element in root.iter()
+        if "glow" in (element.get("class") or "").split()
+    ]
+    fills = [element.get("style") or "" for element in glows]
+    assert [text for text in glows if text.tag == f"{SVG_NS}text"]
+    assert sum("url(#glowOnInk)" in fill for fill in fills) == 2, "first name + photo"
+    assert sum("url(#glowOnBlue)" in fill for fill in fills) == 1, "last name"
+    portrait_glow = [g for g in glows if g.get("mask") == "url(#portrait)"]
+    assert len(portrait_glow) == 1, "the light continues over the portrait"
+
+
+def test_hero_light_is_hidden_when_reduced_motion_is_requested(
+    files: dict[str, str],
+) -> None:
+    assert ".glow{display:none}" in files["cards/hero.svg"]
 
 
 def test_hero_without_a_portrait_still_renders(
