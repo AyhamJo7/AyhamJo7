@@ -8,6 +8,7 @@ from urllib.parse import quote
 
 from profile_cards.cards import activity, heatmap, hero, projects, upstream
 from profile_cards.config import Config
+from profile_cards.feed import site_feed
 from profile_cards.model import Snapshot
 from profile_cards.theme import esc, fmt_int
 
@@ -24,7 +25,7 @@ def card_versions(cards: Mapping[str, str]) -> dict[str, str]:
             content.encode()
         ).hexdigest()[:VERSION_HEX_LENGTH]
         for path, content in cards.items()
-        if path.startswith(f"{CARDS_DIR}/")
+        if path.startswith(f"{CARDS_DIR}/") and path.endswith(".svg")
     }
 
 
@@ -101,4 +102,6 @@ def render_all(config: Config, snapshot: Snapshot) -> dict[str, str]:
             config, project, index
         )
     files[README_NAME] = render_readme(config, snapshot, card_versions(files))
+    # Data for iquantum.co, which draws the heatmap and upstream list itself.
+    files[f"{CARDS_DIR}/site.json"] = site_feed(snapshot)
     return files

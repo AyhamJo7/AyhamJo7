@@ -45,13 +45,28 @@ jobs:
         run: uv run --locked --no-dev profile-cards refresh
 
       - name: Commit the refreshed cards
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md cards
           if git diff --cached --quiet; then
             echo "Cards are already current."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore: refresh profile cards"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # iquantum.co reads cards/site.json at build time; rebuild it when the data moved.
+      - name: Rebuild iquantum.co
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          DEPLOY_HOOK: ${{ secrets.PORTFOLIO_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::warning::PORTFOLIO_DEPLOY_HOOK is not set; iquantum.co keeps its last build."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 30 -X POST "$DEPLOY_HOOK" > /dev/null

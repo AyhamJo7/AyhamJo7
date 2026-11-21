@@ -18,33 +18,35 @@ SIDE_SHADE_RIGHT = 0.66
 SANS_CHAR_WIDTH = 0.56
 MONO_CHAR_WIDTH = 0.6
 
+# "Blue Hour", shared with iquantum.co (its src/styles/tokens.css): midnight
+# navy and signal blue at night, cool paper and royal blue by day.
 # The five blues of the heatmap, light then dark. Level 4 is the brand blue.
-LIGHT_RAMP = ("#c8d3ff", "#94a8ff", "#6280ff", "#2f55ff", "#1a3be0")
-DARK_RAMP = ("#222f78", "#2f49b8", "#4a69ff", "#7d95ff", "#b6c3ff")
+LIGHT_RAMP = ("#cdd9fb", "#9cb5f5", "#5b85ea", "#2f5fe0", "#1d4ed8")
+DARK_RAMP = ("#16245a", "#22409e", "#2f66ff", "#5b8dff", "#9cbcff")
 
 LIGHT = {
-    "bg": "#f3f3f1",
-    "ink": "#111111",
-    "muted": "#6e6e73",
-    "empty": "#e2e2de",
-    "line": "#d9d9d4",
-    "accent": "#2f55ff",
-    "sheen": "#b4c3ff",
-    "panel": "#f3f3f1",
-    "sketch": "#111111",
-    "solid": "#2f55ff",
+    "bg": "#f3f5f9",
+    "ink": "#0a1433",
+    "muted": "#4a5675",
+    "empty": "#e2e7f0",
+    "line": "#d5dbe7",
+    "accent": "#1d4ed8",
+    "sheen": "#c7d6ff",
+    "panel": "#ffffff",
+    "sketch": "#0a1433",
+    "solid": "#1d4ed8",
 }
 DARK = {
-    "bg": "#17181c",
-    "ink": "#f3f3f1",
-    "muted": "#9a9aa2",
-    "empty": "#26272d",
-    "line": "#2d2e35",
-    "accent": "#7d95ff",
-    "sheen": "#eef1ff",
-    "panel": "#f3f3f1",
-    "sketch": "#2a3038",
-    "solid": "#3b5cff",
+    "bg": "#050a1a",
+    "ink": "#e9eefb",
+    "muted": "#8e9bba",
+    "empty": "#111a36",
+    "line": "#1c2747",
+    "accent": "#5b8dff",
+    "sheen": "#9cbcff",
+    "panel": "#e9eefb",
+    "sketch": "#1a2442",
+    "solid": "#2f66ff",
 }
 
 FONT_FILES = {

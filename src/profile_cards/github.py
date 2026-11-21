@@ -19,6 +19,7 @@ from profile_cards.model import (
     Project,
     Snapshot,
     Upstream,
+    UpstreamPull,
     UpstreamRepo,
 )
 from profile_cards.stats import streaks
@@ -72,6 +73,7 @@ query($login: String!, $from: DateTime!, $to: DateTime!,
   }
   merged: search(query: $mergedQuery, type: ISSUE, first: $page) {
     nodes { ... on PullRequest {
+      title url mergedAt
       repository { nameWithOwner stargazerCount isPrivate }
     } }
   }
@@ -152,6 +154,7 @@ def parse_upstream(data: dict[str, Any]) -> Upstream:
     """Merged and open pull requests, counting public repositories only."""
     merged: Counter[str] = Counter()
     stars: dict[str, int] = {}
+    pulls: list[UpstreamPull] = []
     for node in data["merged"]["nodes"]:
         repository = node.get("repository")
         if repository is None or repository["isPrivate"]:
@@ -159,11 +162,24 @@ def parse_upstream(data: dict[str, Any]) -> Upstream:
         name = repository["nameWithOwner"]
         merged[name] += 1
         stars[name] = int(repository["stargazerCount"])
+        pulls.append(
+            UpstreamPull(
+                repo=name,
+                title=str(node["title"]),
+                url=str(node["url"]),
+                merged=date.fromisoformat(str(node["mergedAt"])[:10]),
+            )
+        )
     repos = tuple(
         UpstreamRepo(name, stars[name], count)
         for name, count in sorted(merged.items(), key=lambda kv: -stars[kv[0]])
     )
-    return Upstream(sum(merged.values()), int(data["open"]["issueCount"]), repos)
+    return Upstream(
+        sum(merged.values()),
+        int(data["open"]["issueCount"]),
+        repos,
+        tuple(sorted(pulls, key=lambda pull: pull.merged, reverse=True)),
+    )
 
 
 def parse_commit_activity(payload: Any) -> tuple[int, ...]:

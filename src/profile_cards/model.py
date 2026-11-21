@@ -26,12 +26,23 @@ class UpstreamRepo:
 
 
 @dataclass(frozen=True)
+class UpstreamPull:
+    """One merged pull request in a public repository the user does not own."""
+
+    repo: str
+    title: str
+    url: str
+    merged: date
+
+
+@dataclass(frozen=True)
 class Upstream:
     """Pull requests sent to public repositories the user does not own."""
 
     merged_prs: int
     open_prs: int
     repos: tuple[UpstreamRepo, ...]
+    pulls: tuple[UpstreamPull, ...] = ()
 
     @property
     def reach(self) -> int:
@@ -98,6 +109,15 @@ def snapshot_to_json(snapshot: Snapshot) -> str:
                 {"name": r.name, "stars": r.stars, "merged": r.merged}
                 for r in snapshot.upstream.repos
             ],
+            "pulls": [
+                {
+                    "repo": p.repo,
+                    "title": p.title,
+                    "url": p.url,
+                    "merged": p.merged.isoformat(),
+                }
+                for p in snapshot.upstream.pulls
+            ],
         },
         "projects": [
             {
@@ -134,6 +154,15 @@ def snapshot_from_json(text: str) -> Snapshot:
                 repos=tuple(
                     UpstreamRepo(str(r["name"]), int(r["stars"]), int(r["merged"]))
                     for r in raw["upstream"]["repos"]
+                ),
+                pulls=tuple(
+                    UpstreamPull(
+                        str(p["repo"]),
+                        str(p["title"]),
+                        str(p["url"]),
+                        date.fromisoformat(p["merged"]),
+                    )
+                    for p in raw["upstream"].get("pulls", [])
                 ),
             ),
             projects=tuple(

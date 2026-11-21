@@ -23,6 +23,7 @@ EXPECTED_FILES = {
     "cards/project-1.svg",
     "cards/project-2.svg",
     "cards/project-3.svg",
+    "cards/site.json",
 }
 SVG_NS = "{http://www.w3.org/2000/svg}"
 

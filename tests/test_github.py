@@ -52,21 +52,26 @@ def calendar_payload() -> dict[str, Any]:
 
 
 def search_payload() -> dict[str, Any]:
-    def node(name: str, stars: int, private: bool) -> dict[str, Any]:
+    def node(
+        name: str, stars: int, private: bool, merged: str = "2026-11-01T10:00:00Z"
+    ) -> dict[str, Any]:
         return {
+            "title": f"fix something in {name}",
+            "url": f"https://github.com/{name}/pull/1",
+            "mergedAt": merged,
             "repository": {
                 "nameWithOwner": name,
                 "stargazerCount": stars,
                 "isPrivate": private,
-            }
+            },
         }
 
     return {
         "merged": {
             "nodes": [
-                node("a/small", 10, False),
-                node("b/big", 900, False),
-                node("b/big", 900, False),
+                node("a/small", 10, False, "2026-11-20T08:00:00Z"),
+                node("b/big", 900, False, "2026-09-08T08:00:00Z"),
+                node("b/big", 900, False, "2026-10-01T08:00:00Z"),
                 node("hidden/secret", 5000, True),
                 {},
             ]
@@ -167,6 +172,16 @@ def test_upstream_excludes_private_repositories_and_orders_by_stars() -> None:
     assert upstream.repos[0].merged == 2
     assert upstream.reach == 910
     assert all("secret" not in r.name for r in upstream.repos)
+
+
+def test_merged_pulls_are_public_only_and_newest_first() -> None:
+    pulls = parse_upstream(search_payload()).pulls
+    assert [(p.repo, p.merged.isoformat()) for p in pulls] == [
+        ("a/small", "2026-11-20"),
+        ("b/big", "2026-10-01"),
+        ("b/big", "2026-09-08"),
+    ]
+    assert all("secret" not in p.repo and p.url.startswith("https://") for p in pulls)
 
 
 def test_commit_activity_keeps_the_last_weeks_oldest_first() -> None:
