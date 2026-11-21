@@ -3,7 +3,7 @@
 <a href="https://iquantum.co"><img src="./cards/hero.svg" width="100%" alt="Ayham Joumran, AI Engineer in Hamburg. I design and ship production AI systems, from the first prototype to live traffic, and publish the research behind them." /></a><br>
 <img src="./cards/heatmap.svg" width="100%" alt="Every day, in blue: 3,609 contributions over a year." /><br>
 <img src="./cards/activity.svg" width="100%" alt="The last 12 months on GitHub: monthly totals, streaks and weekday rhythm." /><br>
-<a href="https://github.com/search?q=author%3AAyhamJo7%20is%3Apr%20is%3Amerged%20-user%3AAyhamJo7&amp;type=pullrequests"><img src="./cards/upstream.svg" width="100%" alt="3 merged and 27 open pull requests in other people's projects." /></a><br>
+<a href="https://github.com/search?q=author%3AAyhamJo7%20is%3Apr%20is%3Amerged%20-user%3AAyhamJo7&amp;type=pullrequests"><img src="./cards/upstream.svg" width="100%" alt="3 merged and 28 open pull requests in other people's projects." /></a><br>
 <img src="./cards/coding.svg" width="100%" alt="What I'm coding right now." /><br>
 <a href="https://github.com/AyhamJo7/moin"><img src="./cards/project-1.svg" width="33.333%" alt="moin: A digital front office for small businesses: it answers calls in German from owner-approved knowledge." /></a><a href="https://github.com/AyhamJo7/iquantum"><img src="./cards/project-2.svg" width="33.333%" alt="iquantum: A TypeScript coding-agent runtime with explicit planning, isolated execution and multi-agent coordination." /></a><a href="https://github.com/AyhamJo7/gg"><img src="./cards/project-3.svg" width="33.333%" alt="gg: Local coding-agent orchestration across parallel Git worktrees, with review workflows and commit-scoped verification." /></a>
 </div>

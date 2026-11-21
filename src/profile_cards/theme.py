@@ -127,7 +127,7 @@ STYLE = (
     f":root{{{_vars(LIGHT, LIGHT_RAMP)}}}"
     f"@media(prefers-color-scheme:dark){{:root{{{_vars(DARK, DARK_RAMP)}}}}}"
     ".card{fill:var(--bg)}.ink{fill:var(--ink)}.muted{fill:var(--muted)}"
-    ".accent{fill:var(--accent)}.empty{fill:var(--empty)}.sheen{fill:var(--sheen)}"
+    ".accent{fill:var(--accent)}.empty{fill:var(--empty)}"
     ".solid{fill:var(--solid)}.line{stroke:var(--line);fill:none}"
     ".panel{fill:var(--panel)}.sketch{fill:var(--sketch)}"
     ".paper{fill:var(--bg)}"
@@ -154,8 +154,6 @@ STYLE = (
     ".ping{transform-box:fill-box;transform-origin:center;"
     "animation:ping 2.4s ease-out infinite}"
     ".draw{stroke-dasharray:var(--len);animation:draw 1.6s ease-out both}"
-    "@media(prefers-reduced-motion:reduce){*{animation:none!important}"
-    ".glow{display:none}}"
 )
 
 
@@ -171,13 +169,14 @@ def document(  # noqa: PLR0913 - one wrapper shared by every card
     title: str,
     description: str,
     fonts: Iterable[str],
+    extra_css: str = "",
 ) -> str:
     """Wrap card content into a standalone SVG document."""
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
         f'width="{width}" height="{height}" role="img" aria-labelledby="t d">'
         f'<title id="t">{esc(title)}</title><desc id="d">{esc(description)}</desc>'
-        f"<style>{_font_faces(fonts)}{STYLE}</style>{body}</svg>\n"
+        f"<style>{_font_faces(fonts)}{STYLE}{extra_css}</style>{body}</svg>\n"
     )
 
 

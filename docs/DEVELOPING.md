@@ -68,17 +68,25 @@ the hero simply renders without one.
 
 ## The light in the name
 
-Each name line and the portrait ink are drawn twice: once normally and once as a `glow`
-copy filled with a gradient. The gradient is a soft slanted band in card coordinates
-(transparent, colour, transparent) whose transform is animated with SVG's native
-`animateTransform` (see `_glow_defs` in `cards/hero.py`). One band therefore passes over
-"Ayham", "Joumran" and then the portrait, at constant speed, and rests off the left edge
-between runs. With reduced motion enabled the `glow` copies are hidden.
+The first name, the last name and the portrait ink are each *filled* with a gradient: the
+surface's own colour with one soft slanted band of a brighter colour. The gradient's
+transform is moved by a plain SVG `animateTransform` (see `_shine_defs` in
+`cards/hero.py`), so one band passes over "Ayham", "Joumran" and then the portrait, left
+to right, and rests off the left edge between runs. This is the same mechanism the card
+it was modelled on uses (a `linearGradient` fill plus one `animateTransform`).
 
-Do not move this animation into a `<mask>` or `<clipPath>`: Chrome does not repaint an
-animated element inside a mask, so the light never appears. Check any change to it with
-real-time frames, not static previews (`scratchpad` style CDP capture: load the SVG in
-headless Chrome and screenshot it at 2 s, 3 s, 4 s ...).
+Rules that came out of two failed versions:
+
+- Do not animate anything inside a `<mask>` or `<clipPath>`: Chrome does not repaint it,
+  so the light never appears.
+- Do not draw the light on separate overlay copies that a media query can hide. SMIL is
+  not affected by `prefers-reduced-motion`, and the cards deliberately do not gate any
+  animation on it, so the light plays for everyone.
+- Use literal colours in gradient stops (one gradient per colour scheme, chosen by a CSS
+  class), not CSS variables, and a plain animation without `additive`.
+- Check any change with real-time frames, not static previews: load the SVG in headless
+  Chrome over the DevTools protocol and screenshot it every ~0.5 s, with and without
+  `prefers-reduced-motion` emulated.
 
 ## Fonts
 
