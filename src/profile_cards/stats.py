@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import calendar
 import math
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
@@ -89,8 +90,14 @@ def month_totals(
         key = (day.date.year, day.date.month)
         if key in sums:
             sums[key] += day.count
+    month_length = calendar.monthrange(today.year, today.month)[1]
     return [
-        MonthTotal(y, m, sums[(y, m)], partial=(y, m) == (today.year, today.month))
+        MonthTotal(
+            y,
+            m,
+            sums[(y, m)],
+            partial=(y, m) == (today.year, today.month) and today.day < month_length,
+        )
         for y, m in keys
     ]
 

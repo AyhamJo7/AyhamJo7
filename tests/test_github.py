@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date, timedelta
 from typing import Any
 
 import pytest
@@ -11,31 +12,41 @@ from profile_cards.github import (
     parse_calendar,
     parse_commit_activity,
     parse_upstream,
+    streak_reaches_history_start,
 )
-from profile_cards.model import COMMIT_WEEKS
+from profile_cards.model import COMMIT_WEEKS, YEAR_DAYS, Day
+
+
+def year_payload(
+    private: int, days: list[tuple[str, int]], *, split: int = 2
+) -> dict[str, Any]:
+    """One `contributionsCollection`, with its days spread over two weeks."""
+    return {
+        "restrictedContributionsCount": private,
+        "contributionCalendar": {
+            "weeks": [
+                {
+                    "contributionDays": [
+                        {"date": d, "contributionCount": c} for d, c in days[:split]
+                    ]
+                },
+                {
+                    "contributionDays": [
+                        {"date": d, "contributionCount": c} for d, c in days[split:]
+                    ]
+                },
+            ]
+        },
+    }
 
 
 def calendar_payload() -> dict[str, Any]:
     return {
         "user": {
-            "contributionsCollection": {
-                "restrictedContributionsCount": 7,
-                "contributionCalendar": {
-                    "weeks": [
-                        {
-                            "contributionDays": [
-                                {"date": "2026-11-02", "contributionCount": 3},
-                                {"date": "2026-11-01", "contributionCount": 0},
-                            ]
-                        },
-                        {
-                            "contributionDays": [
-                                {"date": "2026-11-03", "contributionCount": 5}
-                            ]
-                        },
-                    ]
-                },
-            }
+            "current": year_payload(
+                7, [("2026-11-02", 3), ("2026-11-01", 0), ("2026-11-03", 5)]
+            ),
+            "previous": year_payload(11, [("2025-11-02", 2), ("2025-11-01", 4)]),
         }
     }
 
@@ -64,15 +75,88 @@ def search_payload() -> dict[str, Any]:
     }
 
 
-def test_calendar_days_are_sorted_and_private_count_is_read() -> None:
-    days, private = parse_calendar(calendar_payload())
+def test_both_years_are_merged_sorted_and_each_private_count_is_read() -> None:
+    days, private, private_previous = parse_calendar(calendar_payload())
     assert [d.date.isoformat() for d in days] == [
+        "2025-11-01",
+        "2025-11-02",
         "2026-11-01",
         "2026-11-02",
         "2026-11-03",
     ]
-    assert [d.count for d in days] == [0, 3, 5]
-    assert private == 7
+    assert [d.count for d in days] == [4, 2, 0, 3, 5]
+    assert (private, private_previous) == (7, 11)
+
+
+def active_days(length: int, today: date = date(2026, 11, 21)) -> tuple[Day, ...]:
+    start = today - timedelta(days=length - 1)
+    return tuple(Day(start + timedelta(days=i), 1) for i in range(length))
+
+
+def test_older_years_are_only_needed_while_the_streak_reaches_the_oldest_day() -> None:
+    today = date(2026, 11, 21)
+    assert streak_reaches_history_start(active_days(730), today)
+    assert not streak_reaches_history_start((), today)
+
+    broken = list(active_days(730))
+    broken[300] = Day(broken[300].date, 0)
+    assert not streak_reaches_history_start(tuple(broken), today)
+
+
+def test_history_is_extended_until_the_streak_breaks(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    today = date(2026, 11, 21)
+    requests: list[str] = []
+
+    def fake_graphql(
+        _query: str, variables: dict[str, Any], _token: str
+    ) -> dict[str, Any]:
+        requests.append(variables["from"])
+        start = date.fromisoformat(variables["from"][:10])
+        count = 0 if len(requests) == 2 else 1  # the second older year is empty
+        days = [(str(start + timedelta(days=i)), count) for i in range(YEAR_DAYS)]
+        return {"user": {"contributionsCollection": year_payload(0, days)}}
+
+    monkeypatch.setattr(github, "_graphql", fake_graphql)
+    start = github._extend_streak_history("me", "token", today, active_days(730))
+
+    assert len(requests) == 2, "stops once a fetched year breaks the streak"
+    assert len(start) == 730 + 2 * YEAR_DAYS
+
+
+def test_history_extension_stops_at_the_limit(monkeypatch: pytest.MonkeyPatch) -> None:
+    today = date(2026, 11, 21)
+    calls = 0
+
+    def always_active(
+        _query: str, variables: dict[str, Any], _token: str
+    ) -> dict[str, Any]:
+        nonlocal calls
+        calls += 1
+        begin = date.fromisoformat(variables["from"][:10])
+        days = [(str(begin + timedelta(days=i)), 1) for i in range(YEAR_DAYS)]
+        return {"user": {"contributionsCollection": year_payload(0, days)}}
+
+    monkeypatch.setattr(github, "_graphql", always_active)
+    github._extend_streak_history("me", "token", today, active_days(730))
+
+    assert calls == github.HISTORY_WINDOWS_MAX - github.HISTORY_WINDOWS_MIN
+
+
+def test_a_streak_that_already_ended_fetches_nothing_more(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def must_not_be_called(*_a: Any, **_k: Any) -> dict[str, Any]:
+        raise AssertionError("no older year should be fetched")
+
+    monkeypatch.setattr(github, "_graphql", must_not_be_called)
+    days = list(active_days(730))
+    days[400] = Day(days[400].date, 0)
+    result = github._extend_streak_history(
+        "me", "token", date(2026, 11, 21), tuple(days)
+    )
+    assert result == tuple(days)
 
 
 def test_upstream_excludes_private_repositories_and_orders_by_stars() -> None:

@@ -52,6 +52,19 @@ def test_month_totals_covers_twelve_months_and_flags_the_current_one() -> None:
     assert months[0].label == "Dec"
 
 
+def test_the_anchor_month_is_partial_only_before_its_last_day() -> None:
+    mid_month = month_totals(
+        days_from([1] * 400, date(2026, 11, 21)), date(2026, 11, 21)
+    )
+    assert mid_month[-1].partial
+
+    month_end = date(2025, 11, 30)
+    complete = month_totals(days_from([1] * 400, month_end), month_end)
+    assert not complete[-1].partial
+    assert complete[-1].total == 30
+    assert not any(month.partial for month in complete)
+
+
 def test_streak_survives_an_empty_today() -> None:
     days = days_from([0, 1, 1, 1, 0])
     assert streaks(days, TODAY).current == 3

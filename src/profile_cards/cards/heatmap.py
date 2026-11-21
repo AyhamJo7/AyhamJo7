@@ -96,7 +96,8 @@ def _legend(y: float) -> str:
 
 
 def render(config: Config, snapshot: Snapshot) -> str:
-    cells = grid(snapshot.days)
+    year = snapshot.window(0)
+    cells = grid(year)
     thresholds = quantile_thresholds(c.day.count for c in cells)
     updated = snapshot.generated.strftime(UPDATED_FORMAT).upper()
     right = WIDTH - MARGIN_X
@@ -112,7 +113,7 @@ def render(config: Config, snapshot: Snapshot) -> str:
         f"{refreshed}</text>"
         + f'<text class="cap muted" x="{right}" y="86" text-anchor="end" '
         f'font-size="10">Updated {esc(updated)}</text>'
-        + _cells(cells, thresholds, snapshot.days[-1].date if snapshot.days else None)
+        + _cells(cells, thresholds, year[-1].date if year else None)
         + _month_labels(cells)
         + _legend(GRID_TOP + DAYS_PER_WEEK * PITCH + LEGEND_OFFSET)
     )

@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from datetime import date, timedelta
+
 from profile_cards.config import Config
-from profile_cards.model import Snapshot
+from profile_cards.model import YEAR_DAYS, Snapshot
 from profile_cards.stats import (
     MONTH_NAMES,
     MonthTotal,
@@ -24,6 +27,8 @@ MAX_BAR_HEIGHT = 170
 MIN_BAR_HEIGHT = 4
 BAR_WIDTH = 30
 BAR_RADIUS = 7
+AVERAGE_LABEL_BARS = 3
+EN_DASH = "–"  # noqa: RUF001 - the typographic range dash is intended
 BAR_STAGGER_SECONDS = 0.06
 BAR_FIRST_DELAY_SECONDS = 0.15
 SIDE_X = 612
@@ -82,13 +87,27 @@ def _bars(months: list[MonthTotal]) -> str:
             )
     if average:
         y = BASELINE - average / peak * MAX_BAR_HEIGHT
+        label_x = _average_label_x(months, average)
         out.append(
             f'<line class="line" x1="{MARGIN_X}" x2="{CHART_RIGHT}" y1="{y:.1f}" '
             f'y2="{y:.1f}" stroke-width="1.2" stroke-dasharray="3 6"/>'
-            f'<text class="mono muted" x="{MARGIN_X}" y="{y - 6:.1f}" '
+            f'<text class="mono muted" x="{label_x:.1f}" y="{y - 6:.1f}" '
             f'font-size="10">avg {fmt_int(round(average))} / month</text>'
         )
     return "".join(out)
+
+
+def _average_label_x(months: list[MonthTotal], average: float) -> float:
+    """Where to put the average label: above the first run of bars below the line.
+
+    A label on top of a tall bar is unreadable, so it goes where the bars are short.
+    """
+    pitch = (CHART_RIGHT - MARGIN_X) / len(months)
+    for start in range(len(months) - AVERAGE_LABEL_BARS + 1):
+        window = months[start : start + AVERAGE_LABEL_BARS]
+        if all(month.total < average for month in window):
+            return MARGIN_X + start * pitch
+    return MARGIN_X
 
 
 def _grow_seconds(index: int) -> float:
@@ -132,16 +151,50 @@ def _rhythm(totals: list[int]) -> str:
     )
 
 
-def render(config: Config, snapshot: Snapshot) -> str:
-    months = month_totals(snapshot.days, snapshot.generated)
-    run = streaks(snapshot.days, snapshot.generated)
-    peak_day = busiest_day(snapshot.days)
+@dataclass(frozen=True)
+class Period:
+    """Which 12-month window a card shows, and how it words itself."""
+
+    index: int
+    eyebrow: str
+    streak_caption: str
+    title: str
+
+
+LATEST = Period(
+    0, "The last 12 months on GitHub", "current streak", "Twelve months of GitHub"
+)
+PREVIOUS = Period(
+    1, "The 12 months before", "streak up to {date}", "The twelve months before"
+)
+
+
+def _date_label(day: date) -> str:
+    return f"{day.day} {MONTH_NAMES[day.month - 1]} {day.year}"
+
+
+def render(config: Config, snapshot: Snapshot, *, previous: bool = False) -> str:
+    period = PREVIOUS if previous else LATEST
+    days = snapshot.window(period.index)
+    end = snapshot.window_end(period.index)
+    total = sum(day.count for day in days)
+    # Streaks look at all the history up to the window's end, not only the window,
+    # so a streak that began earlier is counted in full.
+    history = [day for day in snapshot.days if day.date <= end]
+    months = month_totals(days, end)
+    run = streaks(history, end)
+    peak_day = busiest_day(days)
+    streak_caption = period.streak_caption.format(
+        date=f"{end.day} {MONTH_NAMES[end.month - 1]}"
+    )
+    private = (
+        snapshot.private_contributions_previous
+        if previous
+        else snapshot.private_contributions
+    )
     notes = []
-    if snapshot.private_contributions:
-        notes.append(
-            f"{fmt_int(snapshot.private_contributions)} of them in private "
-            "repositories."
-        )
+    if private:
+        notes.append(f"{fmt_int(private)} of them in private repositories.")
     if peak_day and peak_day.count:
         notes.append(
             f"Busiest day: {fmt_int(peak_day.count)} on "
@@ -151,32 +204,37 @@ def render(config: Config, snapshot: Snapshot) -> str:
         card_rect(WIDTH, HEIGHT)
         + HATCH
         + live_dot(MARGIN_X + 4, 62)
-        + f'<text class="cap muted" x="{MARGIN_X + 18}" y="66">'
-        "The last 12 months on GitHub</text>"
+        + f'<text class="cap muted" x="{MARGIN_X + 18}" y="66">{esc(period.eyebrow)}'
+        "</text>"
+        + f'<text class="mono muted" x="{WIDTH - MARGIN_X}" y="66" font-size="11" '
+        f'text-anchor="end">{_date_label(end - timedelta(days=YEAR_DAYS - 1))} '
+        f"{EN_DASH} {_date_label(end)}</text>"
         + f'<text class="serif ink" x="{MARGIN_X - 2}" y="146" font-size="82" '
-        f'style="letter-spacing:-.025em">{fmt_int(snapshot.total)}'
+        f'style="letter-spacing:-.025em">{fmt_int(total)}'
         f'<tspan class="it accent"> contributions</tspan></text>'
         + f'<text class="sans muted" x="{MARGIN_X}" y="176" font-size="14">'
         f"{esc(' '.join(notes))}</text>"
         + _bars(months)
-        + _stat(0, str(run.current), " days", "current streak")
+        + _stat(0, str(run.current), " days", streak_caption)
         + _stat(1, str(run.longest), " days", "longest streak")
         + _stat(
             2,
-            str(active_days(snapshot.days)),
-            f" / {len(snapshot.days)}",
+            str(active_days(days)),
+            f" / {len(days)}",
             "days with a contribution",
         )
-        + _rhythm(weekday_totals(snapshot.days))
+        + _rhythm(weekday_totals(days))
     )
     return document(
         WIDTH,
         HEIGHT,
         body,
-        title="Twelve months of GitHub activity",
+        title=period.title,
         description=(
-            f"{config.login} made {fmt_int(snapshot.total)} contributions in the last "
-            f"12 months. Current streak {run.current} days, longest {run.longest}."
+            f"{config.login} made {fmt_int(total)} contributions between "
+            f"{_date_label(end - timedelta(days=YEAR_DAYS - 1))} and "
+            f"{_date_label(end)}. {streak_caption.capitalize()} {run.current} "
+            f"days, longest streak {run.longest} days."
         ),
         fonts=("serif", "serif-italic", "mono", "sans"),
     )
