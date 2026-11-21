@@ -15,6 +15,7 @@ from profile_cards.model import (
     Project,
     Snapshot,
     Upstream,
+    UpstreamPull,
     UpstreamRepo,
 )
 
@@ -48,6 +49,20 @@ def snapshot() -> Snapshot:
             repos=(
                 UpstreamRepo("big/project", 5000, 2),
                 UpstreamRepo("small/tool", 40, 1),
+            ),
+            pulls=(
+                UpstreamPull(
+                    "big/project",
+                    "fix: a <b>tagged</b> title",
+                    "https://github.com/big/project/pull/2",
+                    TODAY,
+                ),
+                UpstreamPull(
+                    "small/tool",
+                    "feat: older",
+                    "https://github.com/small/tool/pull/1",
+                    TODAY - timedelta(days=30),
+                ),
             ),
         ),
         projects=tuple(

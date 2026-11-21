@@ -6,7 +6,7 @@ role = "AI Engineer"
 location = "Hamburg"
 tagline = "I design and ship production AI systems, from the first prototype to live traffic, and publish the research behind them."
 
-# The hero card links here. Placeholder until the site is final.
+# The hero card links here.
 site_url = "https://iquantum.co"
 site_label = "iquantum.co"
 
