@@ -134,7 +134,35 @@ def test_hero_light_is_the_fill_of_each_surface_slid_by_a_plain_animation(
         assert animation.get("attributeName") == "gradientTransform"
         assert animation.get("repeatCount") == "indefinite"
         assert animation.get("additive") is None, "plain replace, no additive sum"
-        assert len((animation.get("values") or "").split(";")) == 3
+        values = (animation.get("values") or "").split(";")
+        key_times = (animation.get("keyTimes") or "").split(";")
+        assert len(values) == len(key_times) > 2
+
+
+def test_hero_light_follows_the_requested_schedule(files: dict[str, str]) -> None:
+    """One pass: starts at 1.5 s, ends at 7 s, and the next pass starts at 8 s.
+
+    Event times are seconds after the image loads: the light reaches the name at 1.5,
+    has left "Ayham" at 3.8, "Joumran" at about 4.2, reaches the photo at 4.3 and has
+    crossed it by 6.5; the band is parked by 7.0 and a new pass starts at 8.0.
+    """
+    root = ET.fromstring(files["cards/hero.svg"])
+    animations = list(root.iter(f"{SVG_NS}animateTransform"))
+    assert animations
+    for animation in animations:
+        begin = float((animation.get("begin") or "").removesuffix("s"))
+        duration = float((animation.get("dur") or "").removesuffix("s"))
+        key_times = [float(v) for v in (animation.get("keyTimes") or "").split(";")]
+        events = [round(begin + k * duration, 2) for k in key_times]
+        assert events == [1.5, 3.8, 4.3, 6.5, 7.0, 8.0]
+        assert key_times[0] == 0.0
+        assert key_times[-1] == 1.0
+        assert begin + duration == 8.0, "the next pass starts at 8 s"
+        translations = [
+            float(v.split()[0]) for v in (animation.get("values") or "").split(";")
+        ]
+        assert translations == sorted(translations), "the band only moves forward"
+        assert translations[-2:] == [translations[-1]] * 2, "parked from 7 s to 8 s"
 
 
 def test_hero_light_fills_the_name_and_the_portrait_ink(

@@ -75,6 +75,25 @@ transform is moved by a plain SVG `animateTransform` (see `_shine_defs` in
 to right, and rests off the left edge between runs. This is the same mechanism the card
 it was modelled on uses (a `linearGradient` fill plus one `animateTransform`).
 
+The schedule is `SHINE_PATH` in `cards/hero.py`: points of (seconds after the image
+loads, translation of the gradient), moved linearly in between. One pass:
+
+| Time | Event |
+| --- | --- |
+| 1.5 s | light reaches "Ayham" and "Joumran" (about 128 px/s through them) |
+| 3.8 s | "Ayham" is done; a quick hop (about 286 px/s) off the end of "Joumran" |
+| 4.2 s | "Joumran" is done |
+| 4.3 s | light reaches the photo (about 169 px/s across it) |
+| 6.5 s | the photo is done |
+| 7.0 s | the band is parked off the card |
+| 8.0 s | the next pass starts (a pass repeats every 6.5 s) |
+
+Speeds differ per stretch because those times cannot all be met at one constant speed.
+The translations were calibrated by measuring real frames against the SVG's own clock
+(`document.documentElement.getCurrentTime()`); when you change the schedule, re-measure
+rather than trusting the geometry, because the faint edges of the band do not count as
+light.
+
 Rules that came out of two failed versions:
 
 - Do not animate anything inside a `<mask>` or `<clipPath>`: Chrome does not repaint it,

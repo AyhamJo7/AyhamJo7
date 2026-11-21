@@ -47,13 +47,19 @@ SHINE_LENGTH = 700
 # The gradient vector tilts up to the right, which slants the band like italics.
 SHINE_SLANT = 150
 SHINE_BAND_STOPS = (0.0, 0.4, 0.5, 0.6, 1.0)
-# Translation of the gradient: far enough left that the band rests off the card, and
-# far enough right that it has left the portrait's edge.
-SHINE_START_X = -700
-SHINE_END_X = 700
-SHINE_BEGIN_SECONDS = 1.6
-SHINE_SECONDS = 10.0
-SHINE_TRAVEL_FRACTION = 0.54
+# Where the gradient rests before the first pass, far enough left to be off the card.
+SHINE_REST_X = -700
+# One pass as (seconds after the image loads, translation of the gradient) points.
+# Motion is linear between points. Read left to right:
+#   1.5 s  the light reaches "Ayham" and "Joumran" and slides through them
+#          (about 128 px/s); it has left "Ayham" by about 3.8 s
+#   3.8 s  a quick hop (about 286 px/s) off the end of "Joumran" (gone by about 4.2 s)
+#   4.3 s  the light reaches the photo and has crossed it by 6.5 s (about 169 px/s)
+#   7.0 s  the band has left the card, and it rests there until the next pass
+#   8.0 s  the next pass starts, so a pass repeats every 6.5 s
+# The speeds differ because the requested times for the three surfaces cannot all be met
+# at one constant speed. The translations were calibrated against real-time frames.
+SHINE_PATH = ((1.5, -400), (3.8, -105), (4.3, 38), (6.5, 410), (7.0, 540), (8.0, 540))
 # (class name, gradient name, base colour key, band colour key)
 SHINE_SURFACES = (
     ("shine-name", "shineName", "ink", "accent"),
@@ -68,16 +74,18 @@ def _shine_gradient(identifier: str, base: str, band: str) -> str:
         f'<stop offset="{offset}" stop-color="{colour}"/>'
         for offset, colour in zip(SHINE_BAND_STOPS, colours, strict=True)
     )
+    begin, end = SHINE_PATH[0][0], SHINE_PATH[-1][0]
+    key_times = ";".join(f"{(t - begin) / (end - begin):.4f}" for t, _ in SHINE_PATH)
+    values = ";".join(f"{x} 0" for _, x in SHINE_PATH)
     travel = (
         f'<animateTransform attributeName="gradientTransform" type="translate" '
-        f'values="{SHINE_START_X} 0;{SHINE_END_X} 0;{SHINE_END_X} 0" '
-        f'keyTimes="0;{SHINE_TRAVEL_FRACTION};1" dur="{SHINE_SECONDS}s" '
-        f'begin="{SHINE_BEGIN_SECONDS}s" repeatCount="indefinite"/>'
+        f'values="{values}" keyTimes="{key_times}" dur="{end - begin:g}s" '
+        f'begin="{begin:g}s" repeatCount="indefinite"/>'
     )
     return (
         f'<linearGradient id="{identifier}" gradientUnits="userSpaceOnUse" '
         f'x1="0" y1="0" x2="{SHINE_LENGTH}" y2="{-SHINE_SLANT}" '
-        f'gradientTransform="translate({SHINE_START_X} 0)">{stops}{travel}'
+        f'gradientTransform="translate({SHINE_REST_X} 0)">{stops}{travel}'
         "</linearGradient>"
     )
 
