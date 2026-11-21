@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+snapshot.json
+preview.html
+.env

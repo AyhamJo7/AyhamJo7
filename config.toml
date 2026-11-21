@@ -1,0 +1,33 @@
+# Everything the cards say about me lives here. Edit, then run `profile-cards render`.
+
+login = "AyhamJo7"
+name = "Ayham Joumran"
+role = "AI Engineer"
+location = "Hamburg"
+tagline = "I design and ship production AI systems, from the first prototype to live traffic, and publish the research behind them."
+
+# The hero card links here. Placeholder until the site is final.
+site_url = "https://iquantum.co"
+site_label = "iquantum.co"
+
+# Up to three public repositories. `blurb` overrides the GitHub description.
+[[projects]]
+repo = "AyhamJo7/moin"
+blurb = "A digital front office for small businesses: it answers calls in German from owner-approved knowledge."
+
+[[projects]]
+repo = "AyhamJo7/iquantum"
+blurb = "A TypeScript coding-agent runtime with explicit planning, isolated execution and multi-agent coordination."
+
+[[projects]]
+repo = "AyhamJo7/gg"
+blurb = "Local coding-agent orchestration across parallel Git worktrees, with review workflows and commit-scoped verification."
+
+# Extra links shown under the cards. `url` must be https.
+[[links]]
+label = "iquantum.co"
+url = "https://iquantum.co"
+
+[[links]]
+label = "github"
+url = "https://github.com/AyhamJo7"
