@@ -14,12 +14,14 @@ from typing import Any
 from profile_cards.config import Config, ProjectConfig
 from profile_cards.model import (
     COMMIT_WEEKS,
+    YEAR_DAYS,
     Day,
     Project,
     Snapshot,
     Upstream,
     UpstreamRepo,
 )
+from profile_cards.stats import streaks
 
 log = logging.getLogger(__name__)
 
@@ -27,22 +29,46 @@ API_ROOT = "https://api.github.com"
 GRAPHQL_URL = f"{API_ROOT}/graphql"
 USER_AGENT = "profile-cards"
 REQUEST_TIMEOUT_SECONDS = 30
-CALENDAR_WINDOW_DAYS = 364
+CALENDAR_WINDOW_DAYS = YEAR_DAYS - 1
+# The two latest years are always fetched (the cards show both); older years only
+# while the current streak still runs back to the oldest day, up to a limit.
+HISTORY_WINDOWS_MIN = 2
+HISTORY_WINDOWS_MAX = 6
 SEARCH_PAGE_SIZE = 100
 STATS_ATTEMPTS = 8
 STATS_RETRY_SECONDS = 4
 HTTP_ACCEPTED = 202
 
-CALENDAR_QUERY = """
+YEAR_FRAGMENT = """
+fragment Year on ContributionsCollection {
+  restrictedContributionsCount
+  contributionCalendar {
+    weeks { contributionDays { date contributionCount } }
+  }
+}
+"""
+
+# One year of the calendar; GitHub limits a contributionsCollection to a year.
+YEAR_QUERY = (
+    YEAR_FRAGMENT
+    + """
+query($login: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $login) {
+    contributionsCollection(from: $from, to: $to) { ...Year }
+  }
+}
+"""
+)
+
+CALENDAR_QUERY = (
+    YEAR_FRAGMENT
+    + """
 query($login: String!, $from: DateTime!, $to: DateTime!,
+      $previousFrom: DateTime!, $previousTo: DateTime!,
       $mergedQuery: String!, $openQuery: String!, $page: Int!) {
   user(login: $login) {
-    contributionsCollection(from: $from, to: $to) {
-      restrictedContributionsCount
-      contributionCalendar {
-        weeks { contributionDays { date contributionCount } }
-      }
-    }
+    current: contributionsCollection(from: $from, to: $to) { ...Year }
+    previous: contributionsCollection(from: $previousFrom, to: $previousTo) { ...Year }
   }
   merged: search(query: $mergedQuery, type: ISSUE, first: $page) {
     nodes { ... on PullRequest {
@@ -52,6 +78,7 @@ query($login: String!, $from: DateTime!, $to: DateTime!,
   open: search(query: $openQuery, type: ISSUE, first: 1) { issueCount }
 }
 """
+)
 
 
 class GitHubError(RuntimeError):
@@ -94,16 +121,31 @@ def _graphql(query: str, variables: dict[str, Any], token: str) -> dict[str, Any
     return data
 
 
-def parse_calendar(data: dict[str, Any]) -> tuple[tuple[Day, ...], int]:
-    """Days of the contribution calendar plus the private-contribution count."""
-    collection = data["user"]["contributionsCollection"]
+def _parse_year(collection: dict[str, Any]) -> tuple[dict[date, int], int]:
     days = {
         date.fromisoformat(item["date"]): int(item["contributionCount"])
         for week in collection["contributionCalendar"]["weeks"]
         for item in week["contributionDays"]
     }
-    ordered = tuple(Day(d, days[d]) for d in sorted(days))
-    return ordered, int(collection["restrictedContributionsCount"])
+    return days, int(collection["restrictedContributionsCount"])
+
+
+def parse_calendar(data: dict[str, Any]) -> tuple[tuple[Day, ...], int, int]:
+    """Days of the two latest 12-month windows plus each window's private count."""
+    current, private = _parse_year(data["user"]["current"])
+    previous, private_previous = _parse_year(data["user"]["previous"])
+    merged = {**previous, **current}
+    return tuple(Day(d, merged[d]) for d in sorted(merged)), private, private_previous
+
+
+def streak_reaches_history_start(days: tuple[Day, ...], today: date) -> bool:
+    """True while the current streak runs back to the oldest day fetched.
+
+    Only then can an older year still extend it, so only then is one fetched.
+    """
+    if not days:
+        return False
+    return streaks(days, today).current >= len(days) - 1
 
 
 def parse_upstream(data: dict[str, Any]) -> Upstream:
@@ -175,25 +217,56 @@ def _fetch_project(entry: ProjectConfig, token: str) -> Project:
 def fetch_snapshot(config: Config, token: str, today: date) -> Snapshot:
     """Query GitHub for everything the cards show."""
     login = config.login
-    window_start = today - timedelta(days=CALENDAR_WINDOW_DAYS)
+    start, end = _window_bounds(today, 0)
+    previous_start, previous_end = _window_bounds(today, 1)
     data = _graphql(
         CALENDAR_QUERY,
         {
             "login": login,
-            "from": f"{window_start.isoformat()}T00:00:00Z",
-            "to": f"{today.isoformat()}T23:59:59Z",
+            "from": start,
+            "to": end,
+            "previousFrom": previous_start,
+            "previousTo": previous_end,
             "mergedQuery": f"author:{login} is:pr is:merged is:public -user:{login}",
             "openQuery": f"author:{login} is:pr is:open is:public -user:{login}",
             "page": SEARCH_PAGE_SIZE,
         },
         token,
     )
-    days, private = parse_calendar(data)
+    days, private, private_previous = parse_calendar(data)
+    days = _extend_streak_history(login, token, today, days)
     return Snapshot(
         login=login,
         generated=today,
         days=days,
         private_contributions=private,
+        private_contributions_previous=private_previous,
         upstream=parse_upstream(data),
         projects=tuple(_fetch_project(entry, token) for entry in config.projects),
     )
+
+
+def _window_bounds(today: date, index: int) -> tuple[str, str]:
+    """ISO timestamps bounding the 365-day window `index`, as GraphQL wants them."""
+    end = today - timedelta(days=YEAR_DAYS * index)
+    start = end - timedelta(days=CALENDAR_WINDOW_DAYS)
+    return f"{start.isoformat()}T00:00:00Z", f"{end.isoformat()}T23:59:59Z"
+
+
+def _extend_streak_history(
+    login: str, token: str, today: date, days: tuple[Day, ...]
+) -> tuple[Day, ...]:
+    """Fetch older years while the current streak still reaches the oldest day."""
+    fetched = HISTORY_WINDOWS_MIN
+    while fetched < HISTORY_WINDOWS_MAX and streak_reaches_history_start(days, today):
+        start, end = _window_bounds(today, fetched)
+        data = _graphql(
+            YEAR_QUERY,
+            {"login": login, "from": start, "to": end},
+            token,
+        )
+        older, _ = _parse_year(data["user"]["contributionsCollection"])
+        merged = {**older, **{day.date: day.count for day in days}}
+        days = tuple(Day(d, merged[d]) for d in sorted(merged))
+        fetched += 1
+    return days

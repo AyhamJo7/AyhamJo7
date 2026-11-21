@@ -10,6 +10,7 @@ import pytest
 from profile_cards.config import Config, load_config
 from profile_cards.model import (
     COMMIT_WEEKS,
+    YEAR_DAYS,
     Day,
     Project,
     Snapshot,
@@ -18,7 +19,7 @@ from profile_cards.model import (
 )
 
 TODAY = date(2026, 11, 21)
-WINDOW_DAYS = 365
+WINDOW_DAYS = 2 * YEAR_DAYS
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -40,6 +41,7 @@ def snapshot() -> Snapshot:
         generated=TODAY,
         days=make_days(),
         private_contributions=120,
+        private_contributions_previous=300,
         upstream=Upstream(
             merged_prs=3,
             open_prs=2,

@@ -145,6 +145,8 @@ STYLE = (
     "@keyframes ping{0%{opacity:.9;transform:scale(1)}"
     "100%{opacity:0;transform:scale(2.6)}}"
     "@keyframes draw{from{stroke-dashoffset:var(--len)}}"
+    "@keyframes bob{0%,100%{transform:none}50%{transform:translateY(3px)}}"
+    ".bob{animation:bob 1.8s ease-in-out infinite}"
     ".rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}"
     ".pop{transform-box:fill-box;transform-origin:center;"
     "animation:pop .55s cubic-bezier(.2,.9,.3,1.3) both}"

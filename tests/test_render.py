@@ -7,8 +7,9 @@ from dataclasses import replace
 import pytest
 
 from profile_cards.config import Config
-from profile_cards.model import Snapshot
+from profile_cards.model import YEAR_DAYS, Snapshot
 from profile_cards.render import render_all
+from profile_cards.stats import MONTH_NAMES
 from profile_cards.theme import compact, esc, fmt_int, shade, wrap
 
 EXPECTED_FILES = {
@@ -21,6 +22,8 @@ EXPECTED_FILES = {
     "cards/project-1.svg",
     "cards/project-2.svg",
     "cards/project-3.svg",
+    "cards/activity-previous.svg",
+    "cards/toggle-previous.svg",
 }
 SVG_NS = "{http://www.w3.org/2000/svg}"
 
@@ -220,8 +223,72 @@ def test_readme_links_to_the_site_and_the_projects(
     assert f'<a href="{config.site_url}">' in readme
     for project in snapshot.projects:
         assert f'href="https://github.com/{project.repo}"' in readme
-    assert readme.count("<img ") == 8
+    assert readme.count("<img ") == 10
     assert "\n\n<" not in readme.split("</div>")[0]
+
+
+def card_text(svg: str) -> str:
+    """All visible text of a card, joined, for simple content assertions."""
+    root = ET.fromstring(svg)
+    return " ".join("".join(el.itertext()) for el in root.iter(f"{SVG_NS}text"))
+
+
+def test_the_toggle_is_a_summary_button_that_opens_the_previous_card(
+    files: dict[str, str],
+) -> None:
+    readme = files["README.md"]
+    block = readme[readme.index("<details>") : readme.index("</details>")]
+    assert "<summary>" in block
+    assert "toggle-previous.svg" in block.split("</summary>")[0]
+    assert "activity-previous.svg" in block.split("</summary>")[1]
+    assert readme.index("activity.svg") < readme.index("<details>")
+    assert readme.index("</details>") < readme.index("upstream.svg")
+    assert "\n\n" not in block
+
+
+def test_without_a_full_previous_year_there_is_no_toggle_and_no_extra_card(
+    config: Config, snapshot: Snapshot
+) -> None:
+    one_year = replace(snapshot, days=snapshot.window(0))
+    result = render_all(config, one_year)
+    assert "cards/activity-previous.svg" not in result
+    assert "cards/toggle-previous.svg" not in result
+    assert "<details>" not in result["README.md"]
+    ET.fromstring(result["cards/activity.svg"])
+
+
+def test_each_activity_card_shows_the_total_of_its_own_window(
+    files: dict[str, str], snapshot: Snapshot
+) -> None:
+    latest = card_text(files["cards/activity.svg"])
+    previous = card_text(files["cards/activity-previous.svg"])
+    assert fmt_int(sum(d.count for d in snapshot.window(0))) in latest
+    assert fmt_int(sum(d.count for d in snapshot.window(1))) in previous
+    assert "The 12 months before" in previous
+    assert "The last 12 months" in latest
+    assert "300 of them in private" in previous
+    assert "120 of them in private" in latest
+
+
+def test_the_previous_card_dates_its_window_and_its_streak(
+    files: dict[str, str], snapshot: Snapshot
+) -> None:
+    previous = card_text(files["cards/activity-previous.svg"])
+    end = snapshot.window_end(1)
+    assert f"{end.day} {MONTH_NAMES[end.month - 1]} {end.year}" in previous
+    assert f"streak up to {end.day} {MONTH_NAMES[end.month - 1]}" in previous
+    assert "current streak" not in previous
+
+
+def test_the_current_streak_counts_beyond_the_twelve_month_window(
+    config: Config, snapshot: Snapshot
+) -> None:
+    always_active = replace(
+        snapshot, days=tuple(replace(d, count=3) for d in snapshot.days)
+    )
+    latest = card_text(render_all(config, always_active)["cards/activity.svg"])
+    assert f"{2 * YEAR_DAYS} days" in latest, "current streak spans both years"
+    assert f"{YEAR_DAYS} / {YEAR_DAYS}" in latest, "active days stay per window"
 
 
 def test_readme_images_have_alt_text(files: dict[str, str]) -> None:
