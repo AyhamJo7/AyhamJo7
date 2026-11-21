@@ -9,7 +9,7 @@ import pytest
 from profile_cards.cards.activity import _shows_year
 from profile_cards.config import Config
 from profile_cards.model import YEAR_DAYS, Snapshot
-from profile_cards.render import render_all
+from profile_cards.render import card_versions, render_all
 from profile_cards.stats import MONTH_NAMES, MonthTotal
 from profile_cards.theme import compact, esc, fmt_int, shade, wrap
 
@@ -366,3 +366,31 @@ def test_formatting_helpers() -> None:
     assert esc('<a href="x">&') == "&lt;a href=&quot;x&quot;&gt;&amp;"
     assert shade("#ffffff", 0.5) == "#808080"
     assert all(len(line) <= 20 for line in wrap("word " * 40, 120, 12))
+
+
+def readme_versions(readme: str) -> dict[str, str]:
+    """Map each card file name in the README to the ?v= value on its image URL."""
+    return dict(re.findall(r'src="\./cards/([\w-]+\.svg)\?v=(\w+)"', readme))
+
+
+def test_every_readme_image_carries_the_hash_of_its_card(
+    files: dict[str, str],
+) -> None:
+    versions = readme_versions(files["README.md"])
+    assert set(versions) == {
+        p.removeprefix("cards/") for p in EXPECTED_FILES if p.endswith(".svg")
+    }
+    assert versions == card_versions(files)
+
+
+def test_a_changed_card_gets_a_new_image_url_and_the_others_keep_theirs(
+    config: Config, snapshot: Snapshot, files: dict[str, str]
+) -> None:
+    before = readme_versions(files["README.md"])
+    busier = replace(
+        snapshot,
+        days=tuple(replace(d, count=d.count + 1) for d in snapshot.days),
+    )
+    after = readme_versions(render_all(config, busier)["README.md"])
+    assert after["activity.svg"] != before["activity.svg"]
+    assert after["coding.svg"] == before["coding.svg"]
