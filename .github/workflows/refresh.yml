@@ -2,9 +2,11 @@ name: refresh-cards
 
 on:
   schedule:
-    # 00:00, 06:00, 12:00 and 18:00 Hamburg time, following daylight saving.
-    - cron: "0 0,6,12,18 * * *"
-      timezone: "Europe/Berlin"
+    # Every 6 hours, in UTC: 00:07, 06:07, 12:07 and 18:07 Hamburg winter time
+    # (one hour later in summer). Off the hour because GitHub delays and drops
+    # top-of-the-hour schedules; no `timezone:` key because the earlier
+    # "0 0,6,12,18" Europe/Berlin schedule never fired.
+    - cron: "7 5,11,17,23 * * *"
   workflow_dispatch:
   push:
     branches: [main]
