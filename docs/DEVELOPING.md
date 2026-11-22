@@ -3,7 +3,8 @@
 The profile README is generated. `config.toml` says what the cards claim, `profile-cards`
 fetches live data from GitHub and draws eight SVG cards into `cards/` (hero, heatmap,
 activity, upstream, a title banner and one card per project), and `README.md` is
-rewritten to point at them. A daily workflow refreshes everything.
+rewritten to point at them. A workflow refreshes everything every 6 hours (00:00, 06:00,
+12:00 and 18:00 Hamburg time).
 
 ## Commands
 
@@ -35,7 +36,7 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy
 
 ## The token
 
-The daily workflow needs a repository secret `PROFILE_TOKEN`: a classic personal access
+The refresh workflow needs a repository secret `PROFILE_TOKEN`: a classic personal access
 token with the `read:user` scope. The built-in token cannot see private contributions, so
 the workflow fails on purpose without the secret instead of publishing lower numbers.
 
