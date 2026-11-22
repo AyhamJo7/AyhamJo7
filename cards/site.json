@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-22",
  "year": {
-  "total": 3807,
+  "total": 3828,
   "days": [
    [
     "2025-11-23",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-22",
-    54
+    75
    ]
   ]
  },
@@ -1472,6 +1472,18 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "dagucloud/dagu",
+   "title": "test: drop the 100ms deadline from the startup observation bound test",
+   "url": "https://github.com/dagucloud/dagu/pull/4018",
+   "merged": "2026-11-22"
+  },
+  {
+   "repo": "dagucloud/dagu",
+   "title": "test: end the suspension at the next hourly fire in TestDismissDAGMissedSlots",
+   "url": "https://github.com/dagucloud/dagu/pull/4016",
+   "merged": "2026-11-22"
+  },
   {
    "repo": "melgarafael/DeskcommCRM",
    "title": "fix(observabilidade): túnel do Sentry não passa pelo login",
