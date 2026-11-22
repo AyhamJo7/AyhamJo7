@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-22",
  "year": {
-  "total": 3830,
+  "total": 3870,
   "days": [
    [
     "2025-11-23",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-22",
-    77
+    117
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "getopenpost/openpost",
+   "title": "fix(capabilities): keep Discord and Telegram settings on link posts",
+   "url": "https://github.com/getopenpost/openpost/pull/519",
+   "merged": "2026-11-22"
+  },
   {
    "repo": "dagucloud/dagu",
    "title": "test: drop the 100ms deadline from the startup observation bound test",
