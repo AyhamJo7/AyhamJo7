@@ -3,8 +3,8 @@
 The profile README is generated. `config.toml` says what the cards claim, `profile-cards`
 fetches live data from GitHub and draws eight SVG cards into `cards/` (hero, heatmap,
 activity, upstream, a title banner and one card per project), and `README.md` is
-rewritten to point at them. A workflow refreshes everything every 6 hours (00:00, 06:00,
-12:00 and 18:00 Hamburg time).
+rewritten to point at them. A workflow refreshes everything every 6 hours (00:07, 06:07,
+12:07 and 18:07 Hamburg winter time, an hour later in summer).
 
 ## Commands
 
