@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-22",
  "year": {
-  "total": 3802,
+  "total": 3807,
   "days": [
    [
     "2025-11-23",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-22",
-    49
+    54
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "melgarafael/DeskcommCRM",
+   "title": "fix(observabilidade): túnel do Sentry não passa pelo login",
+   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5129",
+   "merged": "2026-11-22"
+  },
   {
    "repo": "ThinkInAIXYZ/deepchat",
    "title": "fix(provider): map Opper base URL to builtin",
