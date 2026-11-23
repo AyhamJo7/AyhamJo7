@@ -1,21 +1,17 @@
 {
  "schema": 1,
  "login": "AyhamJo7",
- "generated": "2026-11-22",
+ "generated": "2026-11-23",
  "year": {
-  "total": 3870,
+  "total": 3910,
   "days": [
-   [
-    "2025-11-23",
-    4
-   ],
    [
     "2025-11-24",
     17
    ],
    [
     "2025-11-25",
-    6
+    5
    ],
    [
     "2025-11-26",
@@ -51,7 +47,7 @@
    ],
    [
     "2025-12-04",
-    6
+    5
    ],
    [
     "2025-12-05",
@@ -59,7 +55,7 @@
    ],
    [
     "2025-12-06",
-    6
+    5
    ],
    [
     "2025-12-07",
@@ -111,7 +107,7 @@
    ],
    [
     "2025-12-19",
-    6
+    5
    ],
    [
     "2025-12-20",
@@ -123,7 +119,7 @@
    ],
    [
     "2025-12-22",
-    10
+    9
    ],
    [
     "2025-12-23",
@@ -155,7 +151,7 @@
    ],
    [
     "2025-12-30",
-    8
+    7
    ],
    [
     "2025-12-31",
@@ -195,7 +191,7 @@
    ],
    [
     "2026-01-09",
-    10
+    9
    ],
    [
     "2026-01-10",
@@ -207,7 +203,7 @@
    ],
    [
     "2026-01-12",
-    8
+    7
    ],
    [
     "2026-01-13",
@@ -1459,11 +1455,15 @@
    ],
    [
     "2026-11-21",
-    199
+    205
    ],
    [
     "2026-11-22",
-    117
+    120
+   ],
+   [
+    "2026-11-23",
+    43
    ]
   ]
  },
@@ -1472,6 +1472,30 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "oomol-lab/open-connector",
+   "title": "fix(gemini): default embed_content to a served embedding model",
+   "url": "https://github.com/oomol-lab/open-connector/pull/946",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "oomol-lab/open-connector",
+   "title": "fix(saas): accept webhookId in SaaS connection requests",
+   "url": "https://github.com/oomol-lab/open-connector/pull/941",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "ChatLab/ChatLab",
+   "title": "fix(parser): resolve WhatsApp TXT date order at file level and validate calendar dates",
+   "url": "https://github.com/ChatLab/ChatLab/pull/512",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "oomol-lab/open-connector",
+   "title": "fix(threatfox): reject empty or unusable IOC entries in ok lookup responses",
+   "url": "https://github.com/oomol-lab/open-connector/pull/935",
+   "merged": "2026-11-23"
+  },
   {
    "repo": "getopenpost/openpost",
    "title": "fix(capabilities): keep Discord and Telegram settings on link posts",
