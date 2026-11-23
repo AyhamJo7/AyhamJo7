@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-23",
  "year": {
-  "total": 3910,
+  "total": 3933,
   "days": [
    [
     "2025-11-24",
@@ -219,7 +219,7 @@
    ],
    [
     "2026-01-16",
-    6
+    5
    ],
    [
     "2026-01-17",
@@ -643,7 +643,7 @@
    ],
    [
     "2026-05-02",
-    7
+    6
    ],
    [
     "2026-05-03",
@@ -671,7 +671,7 @@
    ],
    [
     "2026-05-09",
-    38
+    36
    ],
    [
     "2026-05-10",
@@ -695,7 +695,7 @@
    ],
    [
     "2026-05-15",
-    59
+    58
    ],
    [
     "2026-05-16",
@@ -727,7 +727,7 @@
    ],
    [
     "2026-05-23",
-    5
+    4
    ],
    [
     "2026-05-24",
@@ -755,7 +755,7 @@
    ],
    [
     "2026-05-30",
-    6
+    5
    ],
    [
     "2026-05-31",
@@ -1459,11 +1459,11 @@
    ],
    [
     "2026-11-22",
-    120
+    121
    ],
    [
     "2026-11-23",
-    43
+    72
    ]
   ]
  },
@@ -1473,9 +1473,63 @@
  },
  "merged": [
   {
+   "repo": "prapaa-ai/agav",
+   "title": "feat(sbom): emit bom-refs and the dependency graph",
+   "url": "https://github.com/prapaa-ai/agav/pull/863",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "t8y2/dbx",
+   "title": "fix(mongodb): match numeric _id values in the legacy agent",
+   "url": "https://github.com/t8y2/dbx/pull/15494",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "Paca-AI/paca",
+   "title": "fix(web): default new LLM agents to claude-sonnet-4-6",
+   "url": "https://github.com/Paca-AI/paca/pull/822",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "prapaa-ai/agav",
+   "title": "fix(config): default Anthropic to a Claude model Anthropic still serves",
+   "url": "https://github.com/prapaa-ai/agav/pull/862",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "FROWNINGdev/orm-lens",
+   "title": "fix(signals): note \"fires for all models\" only on model signals",
+   "url": "https://github.com/FROWNINGdev/orm-lens/pull/348",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "FROWNINGdev/orm-lens",
+   "title": "fix(parser): resolve bases bound by get_model(\"app\", \"Model\")",
+   "url": "https://github.com/FROWNINGdev/orm-lens/pull/346",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "FROWNINGdev/orm-lens",
+   "title": "fix(migration-risk): stay silent on leaves when a migration won't parse",
+   "url": "https://github.com/FROWNINGdev/orm-lens/pull/345",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "FROWNINGdev/orm-lens",
+   "title": "fix(parser): give TimeStampedModel subclasses created and modified",
+   "url": "https://github.com/FROWNINGdev/orm-lens/pull/344",
+   "merged": "2026-11-23"
+  },
+  {
    "repo": "oomol-lab/open-connector",
    "title": "fix(gemini): default embed_content to a served embedding model",
    "url": "https://github.com/oomol-lab/open-connector/pull/946",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "Egonex-AI/Understand-Anything",
+   "title": "fix(core): keep the submodule edge for `from pkg import mod as alias`",
+   "url": "https://github.com/Egonex-AI/Understand-Anything/pull/807",
    "merged": "2026-11-23"
   },
   {
