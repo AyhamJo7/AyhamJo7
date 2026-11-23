@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-23",
  "year": {
-  "total": 3952,
+  "total": 3954,
   "days": [
    [
     "2025-11-24",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-23",
-    94
+    96
    ]
   ]
  },
@@ -1472,6 +1472,18 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(map): say no unit was found in an empty map",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/296",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(analyze): refuse a folder that does not exist",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/294",
+   "merged": "2026-11-23"
+  },
   {
    "repo": "schmitech/orbit",
    "title": "fix(install): default the wizard's Gemini model to the shipped one",
