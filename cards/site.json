@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-23",
  "year": {
-  "total": 3954,
+  "total": 3957,
   "days": [
    [
     "2025-11-24",
@@ -907,7 +907,7 @@
    ],
    [
     "2026-07-07",
-    26
+    25
    ],
    [
     "2026-07-08",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-23",
-    96
+    100
    ]
   ]
  },
@@ -1488,6 +1488,12 @@
    "repo": "schmitech/orbit",
    "title": "fix(install): default the wizard's Gemini model to the shipped one",
    "url": "https://github.com/schmitech/orbit/pull/455",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "getopenpost/openpost",
+   "title": "fix(platform): skip refused Meta Business Portfolio edges",
+   "url": "https://github.com/getopenpost/openpost/pull/524",
    "merged": "2026-11-23"
   },
   {
