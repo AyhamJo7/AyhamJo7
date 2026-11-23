@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-23",
  "year": {
-  "total": 3951,
+  "total": 3952,
   "days": [
    [
     "2025-11-24",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-23",
-    93
+    94
    ]
   ]
  },
@@ -1476,6 +1476,12 @@
    "repo": "schmitech/orbit",
    "title": "fix(install): default the wizard's Gemini model to the shipped one",
    "url": "https://github.com/schmitech/orbit/pull/455",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "Mintplex-Labs/anything-llm",
+   "title": "fix(i18n): replace unrelated Japanese chat toolbar strings",
+   "url": "https://github.com/Mintplex-Labs/anything-llm/pull/7327",
    "merged": "2026-11-23"
   },
   {
