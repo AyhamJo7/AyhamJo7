@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-23",
  "year": {
-  "total": 3933,
+  "total": 3948,
   "days": [
    [
     "2025-11-24",
@@ -783,7 +783,7 @@
    ],
    [
     "2026-06-06",
-    21
+    20
    ],
    [
     "2026-06-07",
@@ -815,7 +815,7 @@
    ],
    [
     "2026-06-14",
-    8
+    7
    ],
    [
     "2026-06-15",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-23",
-    72
+    89
    ]
   ]
  },
@@ -1472,6 +1472,30 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "schmitech/orbit",
+   "title": "fix(vertexai): key the shipped Vertex AI config as vertexai",
+   "url": "https://github.com/schmitech/orbit/pull/454",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "prapaa-ai/agav",
+   "title": "feat(sbom): record lockfile integrity, package sources and SPDX ids",
+   "url": "https://github.com/prapaa-ai/agav/pull/865",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "brekkylab/backlot",
+   "title": "github: an escape in the last segment of an unserved operation is that operation's own refusal",
+   "url": "https://github.com/brekkylab/backlot/pull/1476",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "Imbad0202/academic-research-skills",
+   "title": "fix(announce): name the plugin agents by their #1037 names after resume or compaction (#1168)",
+   "url": "https://github.com/Imbad0202/academic-research-skills/pull/1169",
+   "merged": "2026-11-23"
+  },
   {
    "repo": "prapaa-ai/agav",
    "title": "feat(sbom): emit bom-refs and the dependency graph",
@@ -1491,9 +1515,21 @@
    "merged": "2026-11-23"
   },
   {
+   "repo": "schmitech/orbit",
+   "title": "fix: move Anthropic defaults off retired and retiring Claude models",
+   "url": "https://github.com/schmitech/orbit/pull/451",
+   "merged": "2026-11-23"
+  },
+  {
    "repo": "prapaa-ai/agav",
    "title": "fix(config): default Anthropic to a Claude model Anthropic still serves",
    "url": "https://github.com/prapaa-ai/agav/pull/862",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "msoedov/agentic_security",
+   "title": "fix(anthropic): default to a Claude model Anthropic still serves",
+   "url": "https://github.com/msoedov/agentic_security/pull/391",
    "merged": "2026-11-23"
   },
   {
@@ -1548,6 +1584,12 @@
    "repo": "oomol-lab/open-connector",
    "title": "fix(threatfox): reject empty or unusable IOC entries in ok lookup responses",
    "url": "https://github.com/oomol-lab/open-connector/pull/935",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "huggingface/huggingface_hub",
+   "title": "[Docs] Fix the Jobs labels example",
+   "url": "https://github.com/huggingface/huggingface_hub/pull/5407",
    "merged": "2026-11-23"
   },
   {
