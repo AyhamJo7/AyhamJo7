@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-23",
  "year": {
-  "total": 3948,
+  "total": 3951,
   "days": [
    [
     "2025-11-24",
@@ -823,7 +823,7 @@
    ],
    [
     "2026-06-16",
-    25
+    24
    ],
    [
     "2026-06-17",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-23",
-    89
+    93
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "schmitech/orbit",
+   "title": "fix(install): default the wizard's Gemini model to the shipped one",
+   "url": "https://github.com/schmitech/orbit/pull/455",
+   "merged": "2026-11-23"
+  },
   {
    "repo": "schmitech/orbit",
    "title": "fix(vertexai): key the shipped Vertex AI config as vertexai",
@@ -1488,6 +1494,12 @@
    "repo": "brekkylab/backlot",
    "title": "github: an escape in the last segment of an unserved operation is that operation's own refusal",
    "url": "https://github.com/brekkylab/backlot/pull/1476",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "ARPAHLS/skillware",
+   "title": "fix(synthetic_generator): default Anthropic to a served Haiku",
+   "url": "https://github.com/ARPAHLS/skillware/pull/511",
    "merged": "2026-11-23"
   },
   {
