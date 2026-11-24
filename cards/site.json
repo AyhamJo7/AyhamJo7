@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-24",
  "year": {
-  "total": 3954,
+  "total": 3961,
   "days": [
    [
     "2025-11-25",
@@ -1251,7 +1251,7 @@
    ],
    [
     "2026-10-02",
-    13
+    12
    ],
    [
     "2026-10-03",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-24",
-    9
+    17
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(go): scaffold uint64, uint and uintptr as unsigned port types",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/414",
+   "merged": "2026-11-24"
+  },
   {
    "repo": "openchamber/openchamber",
    "title": "fix(update): queue system-unit updates with the system manager",
