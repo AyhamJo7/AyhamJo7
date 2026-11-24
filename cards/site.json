@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-24",
  "year": {
-  "total": 3961,
+  "total": 3964,
   "days": [
    [
     "2025-11-25",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-24",
-    17
+    20
    ]
   ]
  },
@@ -1472,6 +1472,24 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(analyze): count lines of code the way gate does",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/435",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(profile): profile a node command on a Node that refuses NODE_OPTIONS",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/429",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(profile): leave a file's top level out of What to port",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/428",
+   "merged": "2026-11-24"
+  },
   {
    "repo": "erkamyaman/rust-anything",
    "title": "fix(go): scaffold uint64, uint and uintptr as unsigned port types",
