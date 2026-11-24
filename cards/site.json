@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-24",
  "year": {
-  "total": 3946,
+  "total": 3948,
   "days": [
    [
     "2025-11-25",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-24",
-    1
+    3
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "Thysrael/Horizon",
+   "title": "fix(models): default Gemini to a model the API still serves",
+   "url": "https://github.com/Thysrael/Horizon/pull/254",
+   "merged": "2026-11-24"
+  },
   {
    "repo": "fabio-rovai/open-ontologies",
    "title": "fix(vocab-check): report declared terms used in the wrong role",
