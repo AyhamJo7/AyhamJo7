@@ -1,14 +1,10 @@
 {
  "schema": 1,
  "login": "AyhamJo7",
- "generated": "2026-11-23",
+ "generated": "2026-11-24",
  "year": {
-  "total": 3957,
+  "total": 3946,
   "days": [
-   [
-    "2025-11-24",
-    17
-   ],
    [
     "2025-11-25",
     5
@@ -951,7 +947,7 @@
    ],
    [
     "2026-07-18",
-    46
+    45
    ],
    [
     "2026-07-19",
@@ -1111,7 +1107,7 @@
    ],
    [
     "2026-08-27",
-    3
+    2
    ],
    [
     "2026-08-28",
@@ -1147,7 +1143,7 @@
    ],
    [
     "2026-09-05",
-    10
+    9
    ],
    [
     "2026-09-06",
@@ -1191,7 +1187,7 @@
    ],
    [
     "2026-09-16",
-    16
+    15
    ],
    [
     "2026-09-17",
@@ -1459,19 +1455,29 @@
    ],
    [
     "2026-11-22",
-    121
+    122
    ],
    [
     "2026-11-23",
-    100
+    108
+   ],
+   [
+    "2026-11-24",
+    1
    ]
   ]
  },
  "rhythm": {
-  "active_days": 650,
+  "active_days": 651,
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "fabio-rovai/open-ontologies",
+   "title": "fix(vocab-check): report declared terms used in the wrong role",
+   "url": "https://github.com/fabio-rovai/open-ontologies/pull/433",
+   "merged": "2026-11-24"
+  },
   {
    "repo": "erkamyaman/rust-anything",
    "title": "fix(map): say no unit was found in an empty map",
