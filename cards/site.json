@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-24",
  "year": {
-  "total": 3948,
+  "total": 3954,
   "days": [
    [
     "2025-11-25",
@@ -1231,7 +1231,7 @@
    ],
    [
     "2026-09-27",
-    39
+    38
    ],
    [
     "2026-09-28",
@@ -1455,7 +1455,7 @@
    ],
    [
     "2026-11-22",
-    122
+    123
    ],
    [
     "2026-11-23",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-24",
-    3
+    9
    ]
   ]
  },
@@ -1473,9 +1473,45 @@
  },
  "merged": [
   {
+   "repo": "openchamber/openchamber",
+   "title": "fix(update): queue system-unit updates with the system manager",
+   "url": "https://github.com/openchamber/openchamber/pull/7434",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "openchamber/openchamber",
+   "title": "fix(git): accept spaces in a remote URL's path",
+   "url": "https://github.com/openchamber/openchamber/pull/7431",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "MakazhanAlpamys/Soup",
+   "title": "fix(data): default Anthropic to a Claude model Anthropic still serves",
+   "url": "https://github.com/MakazhanAlpamys/Soup/pull/3203",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "openchamber/openchamber",
+   "title": "fix(chat): name no model in the status row while compacting",
+   "url": "https://github.com/openchamber/openchamber/pull/7427",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "openchamber/openchamber",
+   "title": "fix(routing): save an unset routing model as no model",
+   "url": "https://github.com/openchamber/openchamber/pull/7425",
+   "merged": "2026-11-24"
+  },
+  {
    "repo": "Thysrael/Horizon",
    "title": "fix(models): default Gemini to a model the API still serves",
    "url": "https://github.com/Thysrael/Horizon/pull/254",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "melgarafael/DeskcommCRM",
+   "title": "fix(agente): nome técnico da capacidade cabe no celular",
+   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5138",
    "merged": "2026-11-24"
   },
   {
