@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-25",
  "year": {
-  "total": 4018,
+  "total": 4024,
   "days": [
    [
     "2025-11-26",
@@ -1447,7 +1447,7 @@
    ],
    [
     "2026-11-21",
-    203
+    201
    ],
    [
     "2026-11-22",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-25",
-    64
+    72
    ]
   ]
  },
@@ -1530,6 +1530,12 @@
    "repo": "erkamyaman/rust-anything",
    "title": "docs(plugin): bring the directory copy of SKILL.md back in sync",
    "url": "https://github.com/erkamyaman/rust-anything/pull/474",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "MakazhanAlpamys/Soup",
+   "title": "fix(eval): report one physical position for custom JSONL syntax errors",
+   "url": "https://github.com/MakazhanAlpamys/Soup/pull/3328",
    "merged": "2026-11-25"
   },
   {
