@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-25",
  "year": {
-  "total": 4024,
+  "total": 4028,
   "days": [
    [
     "2025-11-26",
@@ -1447,7 +1447,7 @@
    ],
    [
     "2026-11-21",
-    201
+    200
    ],
    [
     "2026-11-22",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-25",
-    72
+    77
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "traceopt-ai/traceml",
+   "title": "Write raw logs before full tables evict unwritten rows",
+   "url": "https://github.com/traceopt-ai/traceml/pull/683",
+   "merged": "2026-11-25"
+  },
   {
    "repo": "traceopt-ai/traceml",
    "title": "feat(export): simplify the public step-time JSONL events (schema 2)",
@@ -1488,6 +1494,12 @@
    "repo": "saksham10arora-dotcom/everything-claude-codex",
    "title": "fix(statusline): print no colour when NO_COLOR is set",
    "url": "https://github.com/saksham10arora-dotcom/everything-claude-codex/pull/49",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "MakazhanAlpamys/Soup",
+   "title": "fix(eval): validate gate custom rows against the gate's scorer",
+   "url": "https://github.com/MakazhanAlpamys/Soup/pull/3329",
    "merged": "2026-11-25"
   },
   {
@@ -1572,6 +1584,12 @@
    "repo": "lidge-jun/opencodex",
    "title": "fix(catalog): name a configured Ultrafast tier like the native one",
    "url": "https://github.com/lidge-jun/opencodex/pull/9104",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "samugit83/redamon",
+   "title": "fix(agent): count running-total stream usage once",
+   "url": "https://github.com/samugit83/redamon/pull/243",
    "merged": "2026-11-25"
   },
   {
