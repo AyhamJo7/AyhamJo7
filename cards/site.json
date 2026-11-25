@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-25",
  "year": {
-  "total": 4009,
+  "total": 4018,
   "days": [
    [
     "2025-11-26",
@@ -1443,15 +1443,15 @@
    ],
    [
     "2026-11-20",
-    11
+    10
    ],
    [
     "2026-11-21",
-    205
+    203
    ],
    [
     "2026-11-22",
-    123
+    125
    ],
    [
     "2026-11-23",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-25",
-    54
+    64
    ]
   ]
  },
@@ -1472,6 +1472,18 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "traceopt-ai/traceml",
+   "title": "feat(export): simplify the public step-time JSONL events (schema 2)",
+   "url": "https://github.com/traceopt-ai/traceml/pull/682",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "ZHangZHengEric/Sage",
+   "title": "docs: show current RSI demo JSON before the historical output",
+   "url": "https://github.com/ZHangZHengEric/Sage/pull/363",
+   "merged": "2026-11-25"
+  },
   {
    "repo": "saksham10arora-dotcom/everything-claude-codex",
    "title": "fix(statusline): print no colour when NO_COLOR is set",
@@ -1554,6 +1566,12 @@
    "repo": "lidge-jun/opencodex",
    "title": "fix(catalog): name a configured Ultrafast tier like the native one",
    "url": "https://github.com/lidge-jun/opencodex/pull/9104",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "semantica-agi/semantica",
+   "title": "fix(llms): default OpenAI calls to a model OpenAI still serves",
+   "url": "https://github.com/semantica-agi/semantica/pull/2289",
    "merged": "2026-11-25"
   },
   {
