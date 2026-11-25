@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-25",
  "year": {
-  "total": 4043,
+  "total": 4059,
   "days": [
    [
     "2025-11-26",
@@ -1447,7 +1447,7 @@
    ],
    [
     "2026-11-21",
-    197
+    196
    ],
    [
     "2026-11-22",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-25",
-    95
+    112
    ]
   ]
  },
@@ -1472,6 +1472,30 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "feat(llms-full): add each provider's prompt data policy",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/807",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "data(cerebras): record why openai_compatible is true",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/797",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "data(groq): record why openai_compatible is true",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/785",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "test: cover scripts/contributors.mjs",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/782",
+   "merged": "2026-11-25"
+  },
   {
    "repo": "traceopt-ai/traceml",
    "title": "Write raw logs before full tables evict unwritten rows",
