@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-25",
  "year": {
-  "total": 3967,
+  "total": 4009,
   "days": [
    [
     "2025-11-26",
@@ -1443,7 +1443,7 @@
    ],
    [
     "2026-11-20",
-    15
+    11
    ],
    [
     "2026-11-21",
@@ -1455,7 +1455,7 @@
    ],
    [
     "2026-11-23",
-    108
+    111
    ],
    [
     "2026-11-24",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-25",
-    11
+    54
    ]
   ]
  },
@@ -1472,6 +1472,96 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "saksham10arora-dotcom/everything-claude-codex",
+   "title": "fix(statusline): print no colour when NO_COLOR is set",
+   "url": "https://github.com/saksham10arora-dotcom/everything-claude-codex/pull/49",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): keep the SubagentStore progress test with its subject [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/661",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "elie222/rakazo",
+   "title": "Post text written before an approval card ahead of the card",
+   "url": "https://github.com/elie222/rakazo/pull/6717",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): move Controller tests into controller_test.go [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/660",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): move editor tests into editor_test.go [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/659",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): give each block subject one test file [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/658",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): move Mapper tests into mapper_test.go [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/657",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "docs(plugin): bring the directory copy of SKILL.md back in sync",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/474",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "Egonex-AI/Understand-Anything",
+   "title": "fix(skill): treat Rust in-crate test modules as test files",
+   "url": "https://github.com/Egonex-AI/Understand-Anything/pull/817",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(bench): leave functions that do not match out of the verdict",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/470",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): move install tests into install_test.go [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/656",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "traceopt-ai/traceml",
+   "title": "Show Diagnostics beside run information",
+   "url": "https://github.com/traceopt-ai/traceml/pull/677",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pulseaiclub/phi",
+   "title": "refactor(tests): move mcp session tests into session_test.go [chore]",
+   "url": "https://github.com/pulseaiclub/phi/pull/655",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "lidge-jun/opencodex",
+   "title": "fix(catalog): name a configured Ultrafast tier like the native one",
+   "url": "https://github.com/lidge-jun/opencodex/pull/9104",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "ValueCell-ai/ClawX",
+   "title": "fix(packaging): bundle the playwright-core version OpenClaw pins",
+   "url": "https://github.com/ValueCell-ai/ClawX/pull/1356",
+   "merged": "2026-11-25"
+  },
   {
    "repo": "erkamyaman/rust-anything",
    "title": "fix(analyze): count lines of code the way gate does",
