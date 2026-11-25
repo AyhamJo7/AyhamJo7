@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-25",
  "year": {
-  "total": 4037,
+  "total": 4043,
   "days": [
    [
     "2025-11-26",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-25",
-    89
+    95
    ]
   ]
  },
@@ -1494,6 +1494,12 @@
    "repo": "saksham10arora-dotcom/everything-claude-codex",
    "title": "fix(statusline): print no colour when NO_COLOR is set",
    "url": "https://github.com/saksham10arora-dotcom/everything-claude-codex/pull/49",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "melgarafael/DeskcommCRM",
+   "title": "fix(conversoes): as abas cabem num celular de 375px",
+   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5240",
    "merged": "2026-11-25"
   },
   {
