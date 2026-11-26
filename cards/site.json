@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-26",
  "year": {
-  "total": 4075,
+  "total": 4082,
   "days": [
    [
     "2025-11-27",
@@ -1459,11 +1459,11 @@
    ],
    [
     "2026-11-25",
-    112
+    113
    ],
    [
     "2026-11-26",
-    23
+    29
    ]
   ]
  },
@@ -1472,6 +1472,12 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "docs(faq): child-process waits include the child's own work",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/655",
+   "merged": "2026-11-26"
+  },
   {
    "repo": "pacocartones/free-llm-api-hub",
    "title": "data(voyage-ai): link the official model list",
@@ -1482,6 +1488,24 @@
    "repo": "pacocartones/free-llm-api-hub",
    "title": "data(not-free): quote Replicate's prepaid-credit page",
    "url": "https://github.com/pacocartones/free-llm-api-hub/pull/821",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "getopenpost/openpost",
+   "title": "fix(n8n): resolve local-storage media upload target against the origin",
+   "url": "https://github.com/getopenpost/openpost/pull/538",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "prapaa-ai/agav",
+   "title": "fix(watch): cancel pending callbacks when a watcher stops",
+   "url": "https://github.com/prapaa-ai/agav/pull/949",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "semantica-agi/semantica",
+   "title": "fix(llms): default Anthropic and Gemini to models their APIs still serve",
+   "url": "https://github.com/semantica-agi/semantica/pull/2301",
    "merged": "2026-11-26"
   },
   {
