@@ -1,14 +1,10 @@
 {
  "schema": 1,
  "login": "AyhamJo7",
- "generated": "2026-11-25",
+ "generated": "2026-11-26",
  "year": {
-  "total": 4059,
+  "total": 4075,
   "days": [
-   [
-    "2025-11-26",
-    4
-   ],
    [
     "2025-11-27",
     4
@@ -1447,7 +1443,7 @@
    ],
    [
     "2026-11-21",
-    196
+    193
    ],
    [
     "2026-11-22",
@@ -1464,6 +1460,10 @@
    [
     "2026-11-25",
     112
+   ],
+   [
+    "2026-11-26",
+    23
    ]
   ]
  },
@@ -1472,6 +1472,24 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "data(voyage-ai): link the official model list",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/822",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "data(not-free): quote Replicate's prepaid-credit page",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/821",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "LearningCircuit/local-deep-research",
+   "title": "fix(library): report NULL status timestamps as absent instead of crashing",
+   "url": "https://github.com/LearningCircuit/local-deep-research/pull/9127",
+   "merged": "2026-11-26"
+  },
   {
    "repo": "erkamyaman/rust-anything",
    "title": "docs(how-it-works): name every check gate runs",
