@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-26",
  "year": {
-  "total": 4082,
+  "total": 4088,
   "days": [
    [
     "2025-11-27",
@@ -1459,11 +1459,11 @@
    ],
    [
     "2026-11-25",
-    113
+    115
    ],
    [
     "2026-11-26",
-    29
+    33
    ]
   ]
  },
@@ -1503,6 +1503,18 @@
    "merged": "2026-11-26"
   },
   {
+   "repo": "openchamber/openchamber",
+   "title": "fix(settings): read profiles that still hold the legacy queueModeEnabled",
+   "url": "https://github.com/openchamber/openchamber/pull/7595",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "openchamber/openchamber",
+   "title": "fix(git): answer Git requests when the gpg agent launch never returns",
+   "url": "https://github.com/openchamber/openchamber/pull/7593",
+   "merged": "2026-11-26"
+  },
+  {
    "repo": "semantica-agi/semantica",
    "title": "fix(llms): default Anthropic and Gemini to models their APIs still serve",
    "url": "https://github.com/semantica-agi/semantica/pull/2301",
@@ -1512,6 +1524,12 @@
    "repo": "LearningCircuit/local-deep-research",
    "title": "fix(library): report NULL status timestamps as absent instead of crashing",
    "url": "https://github.com/LearningCircuit/local-deep-research/pull/9127",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "cheaper-inference/OmniRoute",
+   "title": "fix(guardrails): load sharp on use so boot survives without it",
+   "url": "https://github.com/cheaper-inference/OmniRoute/pull/21187",
    "merged": "2026-11-26"
   },
   {
