@@ -1473,6 +1473,36 @@
  },
  "merged": [
   {
+   "repo": "erkamyaman/rust-anything",
+   "title": "docs(how-it-works): name every check gate runs",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/654",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "docs(faq): profile already reports child-process time",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/652",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(bridge): count overload type parameters for --as-json",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/651",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "pacocartones/free-llm-api-hub",
+   "title": "ci(lighthouse): measure /not-free/ and /embed/",
+   "url": "https://github.com/pacocartones/free-llm-api-hub/pull/819",
+   "merged": "2026-11-25"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(bridge): refuse an --as-json name that no export declares",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/646",
+   "merged": "2026-11-25"
+  },
+  {
    "repo": "pacocartones/free-llm-api-hub",
    "title": "feat(llms-full): add each provider's prompt data policy",
    "url": "https://github.com/pacocartones/free-llm-api-hub/pull/807",
