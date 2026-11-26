@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-26",
  "year": {
-  "total": 4088,
+  "total": 4094,
   "days": [
    [
     "2025-11-27",
@@ -1443,7 +1443,7 @@
    ],
    [
     "2026-11-21",
-    193
+    192
    ],
    [
     "2026-11-22",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-26",
-    33
+    40
    ]
   ]
  },
@@ -1491,9 +1491,21 @@
    "merged": "2026-11-26"
   },
   {
+   "repo": "thedotmack/claude-mem",
+   "title": "fix(omp,screenpipe): default to the worker's own port where there is no uid",
+   "url": "https://github.com/thedotmack/claude-mem/pull/6481",
+   "merged": "2026-11-26"
+  },
+  {
    "repo": "getopenpost/openpost",
    "title": "fix(n8n): resolve local-storage media upload target against the origin",
    "url": "https://github.com/getopenpost/openpost/pull/538",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "EvoScientist/EvoScientist",
+   "title": "fix(llm): report Codex tokens to callbacks on non-stream calls",
+   "url": "https://github.com/EvoScientist/EvoScientist/pull/912",
    "merged": "2026-11-26"
   },
   {
@@ -1521,15 +1533,39 @@
    "merged": "2026-11-26"
   },
   {
+   "repo": "secfoo-com/secfoo",
+   "title": "fix(lint): resolve the error-handling ruff findings in src",
+   "url": "https://github.com/secfoo-com/secfoo/pull/196",
+   "merged": "2026-11-26"
+  },
+  {
    "repo": "LearningCircuit/local-deep-research",
    "title": "fix(library): report NULL status timestamps as absent instead of crashing",
    "url": "https://github.com/LearningCircuit/local-deep-research/pull/9127",
    "merged": "2026-11-26"
   },
   {
+   "repo": "t8y2/dbx",
+   "title": "fix(clickhouse): send the connection test query as a POST body",
+   "url": "https://github.com/t8y2/dbx/pull/15661",
+   "merged": "2026-11-26"
+  },
+  {
    "repo": "cheaper-inference/OmniRoute",
    "title": "fix(guardrails): load sharp on use so boot survives without it",
    "url": "https://github.com/cheaper-inference/OmniRoute/pull/21187",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "LearningCircuit/local-deep-research",
+   "title": "fix(research): require an explicit research model instead of the retired Gemini default",
+   "url": "https://github.com/LearningCircuit/local-deep-research/pull/9070",
+   "merged": "2026-11-26"
+  },
+  {
+   "repo": "Bitterbot-AI/bitterbot-desktop",
+   "title": "fix(deep-recall): pick the sub-model for the provider whose key is set",
+   "url": "https://github.com/Bitterbot-AI/bitterbot-desktop/pull/394",
    "merged": "2026-11-26"
   },
   {
