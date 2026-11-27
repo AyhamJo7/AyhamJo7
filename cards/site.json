@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-27",
  "year": {
-  "total": 4105,
+  "total": 4114,
   "days": [
    [
     "2025-11-28",
@@ -1451,11 +1451,11 @@
    ],
    [
     "2026-11-24",
-    23
+    25
    ],
    [
     "2026-11-25",
-    116
+    122
    ],
    [
     "2026-11-26",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-27",
-    15
+    16
    ]
   ]
  },
@@ -1476,6 +1476,12 @@
    "repo": "EvoScientist/EvoScientist",
    "title": "fix(proactive): installing the tool-strip spy twice is a no-op",
    "url": "https://github.com/EvoScientist/EvoScientist/pull/913",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "cheaper-inference/OmniRoute",
+   "title": "fix(api): keep custom headers when a node save omits them",
+   "url": "https://github.com/cheaper-inference/OmniRoute/pull/21228",
    "merged": "2026-11-27"
   },
   {
@@ -1494,6 +1500,12 @@
    "repo": "cortexkit/magic-context",
    "title": "fix(memory): map verification paths inside git submodules",
    "url": "https://github.com/cortexkit/magic-context/pull/974",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "cheaper-inference/OmniRoute",
+   "title": "fix(sse): count in-flight requests for the connection cap",
+   "url": "https://github.com/cheaper-inference/OmniRoute/pull/21163",
    "merged": "2026-11-27"
   },
   {
@@ -2019,12 +2031,6 @@
    "merged": "2026-11-23"
   },
   {
-   "repo": "huggingface/huggingface_hub",
-   "title": "[Docs] Fix the Jobs labels example",
-   "url": "https://github.com/huggingface/huggingface_hub/pull/5407",
-   "merged": "2026-11-23"
-  },
-  {
    "repo": "getopenpost/openpost",
    "title": "fix(capabilities): keep Discord and Telegram settings on link posts",
    "url": "https://github.com/getopenpost/openpost/pull/519",
@@ -2065,12 +2071,6 @@
    "title": "fix(audio): validate decoded audio on FFmpeg builds that exit 0 on decode errors",
    "url": "https://github.com/harry0703/MoneyPrinterTurbo/pull/1823",
    "merged": "2026-11-21"
-  },
-  {
-   "repo": "openclaw/openclaw",
-   "title": "fix: keep past update failures in the Inbox",
-   "url": "https://github.com/openclaw/openclaw/pull/202678",
-   "merged": "2026-11-20"
   }
  ]
 }
