@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-27",
  "year": {
-  "total": 4101,
+  "total": 4102,
   "days": [
    [
     "2025-11-28",
@@ -1439,7 +1439,7 @@
    ],
    [
     "2026-11-21",
-    190
+    189
    ],
    [
     "2026-11-22",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-27",
-    10
+    12
    ]
   ]
  },
@@ -1488,6 +1488,12 @@
    "repo": "cortexkit/magic-context",
    "title": "fix(memory): map verification paths inside git submodules",
    "url": "https://github.com/cortexkit/magic-context/pull/974",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "AlysisAi/AlysisCode",
+   "title": "fix: default image generation to gpt-image-2.6-flare",
+   "url": "https://github.com/AlysisAi/AlysisCode/pull/60",
    "merged": "2026-11-27"
   },
   {
