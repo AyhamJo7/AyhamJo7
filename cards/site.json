@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-27",
  "year": {
-  "total": 4094,
+  "total": 4101,
   "days": [
    [
     "2025-11-28",
@@ -1439,7 +1439,7 @@
    ],
    [
     "2026-11-21",
-    191
+    190
    ],
    [
     "2026-11-22",
@@ -1447,7 +1447,7 @@
    ],
    [
     "2026-11-23",
-    111
+    113
    ],
    [
     "2026-11-24",
@@ -1455,7 +1455,7 @@
    ],
    [
     "2026-11-25",
-    115
+    116
    ],
    [
     "2026-11-26",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-27",
-    5
+    10
    ]
   ]
  },
@@ -1472,6 +1472,30 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "EvoScientist/EvoScientist",
+   "title": "fix(proactive): installing the tool-strip spy twice is a no-op",
+   "url": "https://github.com/EvoScientist/EvoScientist/pull/913",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "brekkylab/backlot",
+   "title": "server: a `\\` first at a www.googleapis.com path outside Drive v3 and Gmail is read as a `/`, and under /drive/v2 is Google's 1,555-byte page",
+   "url": "https://github.com/brekkylab/backlot/pull/1503",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "cortexkit/magic-context",
+   "title": "fix(memory): map verification paths inside git submodules",
+   "url": "https://github.com/cortexkit/magic-context/pull/974",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "Anil-matcha/suparagent",
+   "title": "Default image generation to gpt-image-2.6-flare",
+   "url": "https://github.com/Anil-matcha/suparagent/pull/338",
+   "merged": "2026-11-27"
+  },
   {
    "repo": "erkamyaman/rust-anything",
    "title": "docs(faq): child-process waits include the child's own work",
