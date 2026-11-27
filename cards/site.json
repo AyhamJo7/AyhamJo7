@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-27",
  "year": {
-  "total": 4102,
+  "total": 4105,
   "days": [
    [
     "2025-11-28",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-27",
-    12
+    15
    ]
   ]
  },
@@ -1482,6 +1482,12 @@
    "repo": "brekkylab/backlot",
    "title": "server: a `\\` first at a www.googleapis.com path outside Drive v3 and Gmail is read as a `/`, and under /drive/v2 is Google's 1,555-byte page",
    "url": "https://github.com/brekkylab/backlot/pull/1503",
+   "merged": "2026-11-27"
+  },
+  {
+   "repo": "EvoScientist/EvoScientist",
+   "title": "fix(update): keep commands installed with --with-executables-from",
+   "url": "https://github.com/EvoScientist/EvoScientist/pull/910",
    "merged": "2026-11-27"
   },
   {
@@ -2065,12 +2071,6 @@
    "title": "fix: keep past update failures in the Inbox",
    "url": "https://github.com/openclaw/openclaw/pull/202678",
    "merged": "2026-11-20"
-  },
-  {
-   "repo": "TheAlgorithms/Python",
-   "title": "Add Sieve of Atkin algorithm for efficient prime generation",
-   "url": "https://github.com/TheAlgorithms/Python/pull/12974",
-   "merged": "2026-09-08"
   }
  ]
 }
