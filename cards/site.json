@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-28",
  "year": {
-  "total": 4141,
+  "total": 4144,
   "days": [
    [
     "2025-11-29",
@@ -1463,7 +1463,7 @@
    ],
    [
     "2026-11-28",
-    29
+    32
    ]
   ]
  },
@@ -1530,6 +1530,12 @@
    "repo": "erkamyaman/rust-anything",
    "title": "analyze: resolve Python imports of a script's own sibling modules",
    "url": "https://github.com/erkamyaman/rust-anything/pull/804",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "crmne/ruby_llm",
+   "title": "Raise a response-bearing error for unreadable bodies",
+   "url": "https://github.com/crmne/ruby_llm/pull/1788",
    "merged": "2026-11-28"
   },
   {
@@ -1875,6 +1881,12 @@
    "merged": "2026-11-25"
   },
   {
+   "repo": "ValueCell-ai/ClawX",
+   "title": "fix(packaging): bundle the playwright-core version OpenClaw pins",
+   "url": "https://github.com/ValueCell-ai/ClawX/pull/1356",
+   "merged": "2026-11-25"
+  },
+  {
    "repo": "erkamyaman/rust-anything",
    "title": "fix(analyze): count lines of code the way gate does",
    "url": "https://github.com/erkamyaman/rust-anything/pull/435",
@@ -1932,6 +1944,18 @@
    "repo": "Thysrael/Horizon",
    "title": "fix(models): default Gemini to a model the API still serves",
    "url": "https://github.com/Thysrael/Horizon/pull/254",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "melgarafael/DeskcommCRM",
+   "title": "fix(agente): nome técnico da capacidade cabe no celular",
+   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5138",
+   "merged": "2026-11-24"
+  },
+  {
+   "repo": "fabio-rovai/open-ontologies",
+   "title": "fix(vocab-check): report declared terms used in the wrong role",
+   "url": "https://github.com/fabio-rovai/open-ontologies/pull/433",
    "merged": "2026-11-24"
   },
   {
@@ -2067,10 +2091,82 @@
    "merged": "2026-11-23"
   },
   {
+   "repo": "oomol-lab/open-connector",
+   "title": "fix(saas): accept webhookId in SaaS connection requests",
+   "url": "https://github.com/oomol-lab/open-connector/pull/941",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "ChatLab/ChatLab",
+   "title": "fix(parser): resolve WhatsApp TXT date order at file level and validate calendar dates",
+   "url": "https://github.com/ChatLab/ChatLab/pull/512",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "oomol-lab/open-connector",
+   "title": "fix(threatfox): reject empty or unusable IOC entries in ok lookup responses",
+   "url": "https://github.com/oomol-lab/open-connector/pull/935",
+   "merged": "2026-11-23"
+  },
+  {
+   "repo": "huggingface/huggingface_hub",
+   "title": "[Docs] Fix the Jobs labels example",
+   "url": "https://github.com/huggingface/huggingface_hub/pull/5407",
+   "merged": "2026-11-23"
+  },
+  {
    "repo": "getopenpost/openpost",
    "title": "fix(capabilities): keep Discord and Telegram settings on link posts",
    "url": "https://github.com/getopenpost/openpost/pull/519",
    "merged": "2026-11-22"
+  },
+  {
+   "repo": "dagucloud/dagu",
+   "title": "test: drop the 100ms deadline from the startup observation bound test",
+   "url": "https://github.com/dagucloud/dagu/pull/4018",
+   "merged": "2026-11-22"
+  },
+  {
+   "repo": "dagucloud/dagu",
+   "title": "test: end the suspension at the next hourly fire in TestDismissDAGMissedSlots",
+   "url": "https://github.com/dagucloud/dagu/pull/4016",
+   "merged": "2026-11-22"
+  },
+  {
+   "repo": "melgarafael/DeskcommCRM",
+   "title": "fix(observabilidade): túnel do Sentry não passa pelo login",
+   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5129",
+   "merged": "2026-11-22"
+  },
+  {
+   "repo": "ThinkInAIXYZ/deepchat",
+   "title": "fix(provider): map Opper base URL to builtin",
+   "url": "https://github.com/ThinkInAIXYZ/deepchat/pull/2537",
+   "merged": "2026-11-22"
+  },
+  {
+   "repo": "openclaw/openclaw",
+   "title": "fix(ui): keep the right-docked Home actions clear of the window controls",
+   "url": "https://github.com/openclaw/openclaw/pull/202733",
+   "merged": "2026-11-22"
+  },
+  {
+   "repo": "harry0703/MoneyPrinterTurbo",
+   "title": "fix(audio): validate decoded audio on FFmpeg builds that exit 0 on decode errors",
+   "url": "https://github.com/harry0703/MoneyPrinterTurbo/pull/1823",
+   "merged": "2026-11-21"
+  },
+  {
+   "repo": "openclaw/openclaw",
+   "title": "fix: keep past update failures in the Inbox",
+   "url": "https://github.com/openclaw/openclaw/pull/202678",
+   "merged": "2026-11-20"
+  },
+  {
+   "repo": "TheAlgorithms/Python",
+   "title": "Add Sieve of Atkin algorithm for efficient prime generation",
+   "url": "https://github.com/TheAlgorithms/Python/pull/12974",
+   "merged": "2026-09-08"
   }
  ]
 }
