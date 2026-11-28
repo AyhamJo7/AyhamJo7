@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-28",
  "year": {
-  "total": 4110,
+  "total": 4115,
   "days": [
    [
     "2025-11-29",
@@ -1463,15 +1463,21 @@
    ],
    [
     "2026-11-28",
-    0
+    5
    ]
   ]
  },
  "rhythm": {
-  "active_days": 650,
+  "active_days": 651,
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "bmad-code-org/BMAD-METHOD",
+   "title": "fix(founder): reject inf, nan and overflowing numbers as input errors",
+   "url": "https://github.com/bmad-code-org/BMAD-METHOD/pull/3260",
+   "merged": "2026-11-28"
+  },
   {
    "repo": "EvoScientist/EvoScientist",
    "title": "fix(proactive): installing the tool-strip spy twice is a no-op",
@@ -2058,12 +2064,6 @@
    "repo": "ThinkInAIXYZ/deepchat",
    "title": "fix(provider): map Opper base URL to builtin",
    "url": "https://github.com/ThinkInAIXYZ/deepchat/pull/2537",
-   "merged": "2026-11-22"
-  },
-  {
-   "repo": "openclaw/openclaw",
-   "title": "fix(ui): keep the right-docked Home actions clear of the window controls",
-   "url": "https://github.com/openclaw/openclaw/pull/202733",
    "merged": "2026-11-22"
   },
   {
