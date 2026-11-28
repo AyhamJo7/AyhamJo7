@@ -36,6 +36,8 @@ CALENDAR_WINDOW_DAYS = YEAR_DAYS - 1
 HISTORY_WINDOWS_MIN = 2
 HISTORY_WINDOWS_MAX = 6
 SEARCH_PAGE_SIZE = 100
+# GitHub search returns at most 1000 results, so at most 10 full pages exist.
+SEARCH_PAGES_MAX = 10
 STATS_ATTEMPTS = 8
 STATS_RETRY_SECONDS = 4
 HTTP_ACCEPTED = 202
@@ -61,8 +63,31 @@ query($login: String!, $from: DateTime!, $to: DateTime!) {
 """
 )
 
+MERGED_FRAGMENT = """
+fragment Merged on SearchResultItemConnection {
+  nodes { ... on PullRequest {
+    title url mergedAt
+    repository { nameWithOwner stargazerCount isPrivate }
+  } }
+  pageInfo { hasNextPage endCursor }
+}
+"""
+
+# The pages after the first one, fetched by cursor.
+MERGED_PAGE_QUERY = (
+    MERGED_FRAGMENT
+    + """
+query($mergedQuery: String!, $page: Int!, $after: String!) {
+  merged: search(query: $mergedQuery, type: ISSUE, first: $page, after: $after) {
+    ...Merged
+  }
+}
+"""
+)
+
 CALENDAR_QUERY = (
     YEAR_FRAGMENT
+    + MERGED_FRAGMENT
     + """
 query($login: String!, $from: DateTime!, $to: DateTime!,
       $previousFrom: DateTime!, $previousTo: DateTime!,
@@ -71,12 +96,7 @@ query($login: String!, $from: DateTime!, $to: DateTime!,
     current: contributionsCollection(from: $from, to: $to) { ...Year }
     previous: contributionsCollection(from: $previousFrom, to: $previousTo) { ...Year }
   }
-  merged: search(query: $mergedQuery, type: ISSUE, first: $page) {
-    nodes { ... on PullRequest {
-      title url mergedAt
-      repository { nameWithOwner stargazerCount isPrivate }
-    } }
-  }
+  merged: search(query: $mergedQuery, type: ISSUE, first: $page) { ...Merged }
   open: search(query: $openQuery, type: ISSUE, first: 1) { issueCount }
 }
 """
@@ -148,6 +168,37 @@ def streak_reaches_history_start(days: tuple[Day, ...], today: date) -> bool:
     if not days:
         return False
     return streaks(days, today).current >= len(days) - 1
+
+
+def _all_merged_nodes(
+    first_page: dict[str, Any], merged_query: str, token: str
+) -> list[Any]:
+    """Every merged pull request, following the cursor past the first page.
+
+    Counting only the first page capped the card at one page of pull requests and
+    made reach depend on which of them search happened to return.
+    """
+    nodes = list(first_page["nodes"])
+    info = first_page["pageInfo"]
+    pages = 1
+    while info["hasNextPage"] and pages < SEARCH_PAGES_MAX:
+        page = _graphql(
+            MERGED_PAGE_QUERY,
+            {
+                "mergedQuery": merged_query,
+                "page": SEARCH_PAGE_SIZE,
+                "after": info["endCursor"],
+            },
+            token,
+        )["merged"]
+        nodes.extend(page["nodes"])
+        info = page["pageInfo"]
+        pages += 1
+    if info["hasNextPage"]:
+        raise GitHubError(
+            "more merged pull requests than GitHub search can page through"
+        )
+    return nodes
 
 
 def parse_upstream(data: dict[str, Any]) -> Upstream:
@@ -235,6 +286,7 @@ def fetch_snapshot(config: Config, token: str, today: date) -> Snapshot:
     login = config.login
     start, end = _window_bounds(today, 0)
     previous_start, previous_end = _window_bounds(today, 1)
+    merged_query = f"author:{login} is:pr is:merged is:public -user:{login}"
     data = _graphql(
         CALENDAR_QUERY,
         {
@@ -243,7 +295,7 @@ def fetch_snapshot(config: Config, token: str, today: date) -> Snapshot:
             "to": end,
             "previousFrom": previous_start,
             "previousTo": previous_end,
-            "mergedQuery": f"author:{login} is:pr is:merged is:public -user:{login}",
+            "mergedQuery": merged_query,
             "openQuery": f"author:{login} is:pr is:open is:public -user:{login}",
             "page": SEARCH_PAGE_SIZE,
         },
@@ -251,13 +303,14 @@ def fetch_snapshot(config: Config, token: str, today: date) -> Snapshot:
     )
     days, private, private_previous = parse_calendar(data)
     days = _extend_streak_history(login, token, today, days)
+    merged_nodes = _all_merged_nodes(data["merged"], merged_query, token)
     return Snapshot(
         login=login,
         generated=today,
         days=days,
         private_contributions=private,
         private_contributions_previous=private_previous,
-        upstream=parse_upstream(data),
+        upstream=parse_upstream({**data, "merged": {"nodes": merged_nodes}}),
         projects=tuple(_fetch_project(entry, token) for entry in config.projects),
     )
 

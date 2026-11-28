@@ -174,6 +174,73 @@ def test_upstream_excludes_private_repositories_and_orders_by_stars() -> None:
     assert all("secret" not in r.name for r in upstream.repos)
 
 
+def merged_pages(total: int, page_size: int) -> list[dict[str, Any]]:
+    """`total` merged pull requests, split into search pages with cursors."""
+    nodes = [
+        {
+            "title": f"change {n}",
+            "url": f"https://github.com/o/r{n}/pull/1",
+            "mergedAt": "2026-11-01T10:00:00Z",
+            "repository": {
+                "nameWithOwner": f"o/r{n}",
+                "stargazerCount": 1,
+                "isPrivate": False,
+            },
+        }
+        for n in range(total)
+    ]
+    chunks = [nodes[i : i + page_size] for i in range(0, total, page_size)]
+    return [
+        {
+            "nodes": chunk,
+            "pageInfo": {"hasNextPage": i < len(chunks) - 1, "endCursor": f"c{i}"},
+        }
+        for i, chunk in enumerate(chunks)
+    ]
+
+
+def test_merged_pulls_beyond_the_first_page_are_all_counted(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    pages = merged_pages(250, github.SEARCH_PAGE_SIZE)
+    cursors: list[str] = []
+
+    def next_page(
+        _query: str, variables: dict[str, Any], _token: str
+    ) -> dict[str, Any]:
+        cursors.append(variables["after"])
+        return {"merged": pages[len(cursors)]}
+
+    monkeypatch.setattr(github, "_graphql", next_page)
+    nodes = github._all_merged_nodes(pages[0], "q", "token")
+
+    assert len(nodes) == 250, "the card used to stop at the first 100"
+    assert cursors == ["c0", "c1"]
+
+
+def test_a_single_page_of_merged_pulls_needs_no_more_requests(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def must_not_be_called(*_a: Any, **_k: Any) -> dict[str, Any]:
+        raise AssertionError("there is no next page")
+
+    monkeypatch.setattr(github, "_graphql", must_not_be_called)
+    page = merged_pages(40, github.SEARCH_PAGE_SIZE)[0]
+    assert len(github._all_merged_nodes(page, "q", "token")) == 40
+
+
+def test_more_pages_than_search_can_serve_fail_instead_of_undercounting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    endless = {
+        "nodes": [],
+        "pageInfo": {"hasNextPage": True, "endCursor": "again"},
+    }
+    monkeypatch.setattr(github, "_graphql", lambda *_a, **_k: {"merged": endless})
+    with pytest.raises(GitHubError):
+        github._all_merged_nodes(endless, "q", "token")
+
+
 def test_merged_pulls_are_public_only_and_newest_first() -> None:
     pulls = parse_upstream(search_payload()).pulls
     assert [(p.repo, p.merged.isoformat()) for p in pulls] == [
