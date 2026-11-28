@@ -3,7 +3,7 @@
  "login": "AyhamJo7",
  "generated": "2026-11-28",
  "year": {
-  "total": 4122,
+  "total": 4141,
   "days": [
    [
     "2025-11-29",
@@ -1455,15 +1455,15 @@
    ],
    [
     "2026-11-26",
-    40
+    41
    ],
    [
     "2026-11-27",
-    16
+    17
    ],
    [
     "2026-11-28",
-    12
+    29
    ]
   ]
  },
@@ -1472,6 +1472,72 @@
   "span_days": 730
  },
  "merged": [
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(pyo3): keep the raw identifier of a keyword-named parameter",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/828",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(pyo3): take a dataclass argument as its class name and fields",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/826",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(codegen): read a port's imported type names with their paths",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/824",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(pyo3): bind an optional list parameter as Option<Bound>",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/822",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "fix(app): pair written files by their normalized names",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/820",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "melgarafael/DeskcommCRM",
+   "title": "fix(propostas): enviar a proposta não troca o valor de negócio com venda",
+   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5372",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "record: pass None to a required Python parameter, never leave it out",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/810",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "python: bridge pathlib.Path as a path, not as JSON",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/808",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "http: pick the retry port when the test asks for it",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/806",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "erkamyaman/rust-anything",
+   "title": "analyze: resolve Python imports of a script's own sibling modules",
+   "url": "https://github.com/erkamyaman/rust-anything/pull/804",
+   "merged": "2026-11-28"
+  },
+  {
+   "repo": "HKUDS/DeepTutor",
+   "title": "fix(learning): read the index each knowledge base's provider publishes",
+   "url": "https://github.com/HKUDS/DeepTutor/pull/2898",
+   "merged": "2026-11-28"
+  },
   {
    "repo": "bmad-code-org/BMAD-METHOD",
    "title": "fix(founder): reject inf, nan and overflowing numbers as input errors",
@@ -1809,12 +1875,6 @@
    "merged": "2026-11-25"
   },
   {
-   "repo": "ValueCell-ai/ClawX",
-   "title": "fix(packaging): bundle the playwright-core version OpenClaw pins",
-   "url": "https://github.com/ValueCell-ai/ClawX/pull/1356",
-   "merged": "2026-11-25"
-  },
-  {
    "repo": "erkamyaman/rust-anything",
    "title": "fix(analyze): count lines of code the way gate does",
    "url": "https://github.com/erkamyaman/rust-anything/pull/435",
@@ -1872,18 +1932,6 @@
    "repo": "Thysrael/Horizon",
    "title": "fix(models): default Gemini to a model the API still serves",
    "url": "https://github.com/Thysrael/Horizon/pull/254",
-   "merged": "2026-11-24"
-  },
-  {
-   "repo": "melgarafael/DeskcommCRM",
-   "title": "fix(agente): nome técnico da capacidade cabe no celular",
-   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5138",
-   "merged": "2026-11-24"
-  },
-  {
-   "repo": "fabio-rovai/open-ontologies",
-   "title": "fix(vocab-check): report declared terms used in the wrong role",
-   "url": "https://github.com/fabio-rovai/open-ontologies/pull/433",
    "merged": "2026-11-24"
   },
   {
@@ -2019,58 +2067,10 @@
    "merged": "2026-11-23"
   },
   {
-   "repo": "oomol-lab/open-connector",
-   "title": "fix(saas): accept webhookId in SaaS connection requests",
-   "url": "https://github.com/oomol-lab/open-connector/pull/941",
-   "merged": "2026-11-23"
-  },
-  {
-   "repo": "ChatLab/ChatLab",
-   "title": "fix(parser): resolve WhatsApp TXT date order at file level and validate calendar dates",
-   "url": "https://github.com/ChatLab/ChatLab/pull/512",
-   "merged": "2026-11-23"
-  },
-  {
-   "repo": "oomol-lab/open-connector",
-   "title": "fix(threatfox): reject empty or unusable IOC entries in ok lookup responses",
-   "url": "https://github.com/oomol-lab/open-connector/pull/935",
-   "merged": "2026-11-23"
-  },
-  {
    "repo": "getopenpost/openpost",
    "title": "fix(capabilities): keep Discord and Telegram settings on link posts",
    "url": "https://github.com/getopenpost/openpost/pull/519",
    "merged": "2026-11-22"
-  },
-  {
-   "repo": "dagucloud/dagu",
-   "title": "test: drop the 100ms deadline from the startup observation bound test",
-   "url": "https://github.com/dagucloud/dagu/pull/4018",
-   "merged": "2026-11-22"
-  },
-  {
-   "repo": "dagucloud/dagu",
-   "title": "test: end the suspension at the next hourly fire in TestDismissDAGMissedSlots",
-   "url": "https://github.com/dagucloud/dagu/pull/4016",
-   "merged": "2026-11-22"
-  },
-  {
-   "repo": "melgarafael/DeskcommCRM",
-   "title": "fix(observabilidade): túnel do Sentry não passa pelo login",
-   "url": "https://github.com/melgarafael/DeskcommCRM/pull/5129",
-   "merged": "2026-11-22"
-  },
-  {
-   "repo": "ThinkInAIXYZ/deepchat",
-   "title": "fix(provider): map Opper base URL to builtin",
-   "url": "https://github.com/ThinkInAIXYZ/deepchat/pull/2537",
-   "merged": "2026-11-22"
-  },
-  {
-   "repo": "harry0703/MoneyPrinterTurbo",
-   "title": "fix(audio): validate decoded audio on FFmpeg builds that exit 0 on decode errors",
-   "url": "https://github.com/harry0703/MoneyPrinterTurbo/pull/1823",
-   "merged": "2026-11-21"
   }
  ]
 }
